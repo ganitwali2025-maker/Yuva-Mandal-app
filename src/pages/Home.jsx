@@ -7,19 +7,10 @@ import ServiceIcon from '../components/cards/ServiceIcon';
 import BottomNav from '../components/layout/BottomNav';
 
 export default function Home() {
-  const { db, settings, connState } = useApp();
+  const { db, settings } = useApp();
   const totals = calculateTotals(db);
   const recent = getRecentActivities(db, 5);
   const navigate = useNavigate();
-
-  const connMessage =
-    connState === 'online'
-      ? 'Google Sheet से जुड़ा हुआ है'
-      : connState === 'connecting'
-      ? 'जोड़ा जा रहा है...'
-      : connState === 'error'
-      ? 'कनेक्शन में समस्या — Settings देखें'
-      : 'Offline मोड (Settings में Sheet जोड़ें)';
 
   return (
     <div className="app">
@@ -32,15 +23,9 @@ export default function Home() {
               <span>{settings.village}</span>
             </div>
           </div>
-          <div className="header-actions">
-            <button className="icon-btn" onClick={() => navigate('/settings')}>
-              ⚙
-            </button>
-          </div>
         </div>
         <div className="greet">
           <h1>नमस्ते, साथियों 👋</h1>
-          <p>{connMessage}</p>
         </div>
       </div>
 
@@ -63,7 +48,7 @@ export default function Home() {
           <ServiceIcon page="expense" icon="－" color="#E24C4B" label="खर्च दर्ज" />
           <ServiceIcon page="reports" icon="▤" color="#0EA5A5" label="रिपोर्ट शीट" />
           <ServiceIcon page="idcard-self" icon="🪪" color="#151966" label="मेरा कार्ड" />
-          <ServiceIcon page="settings" icon="⚙" color="#767A99" label="सेटिंग" />
+
         </div>
 
         <div className="section-title">
