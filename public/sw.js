@@ -1,4 +1,4 @@
-const CACHE_NAME = 'yuva-mandal-cache-v2';
+const CACHE_NAME = 'yuva-mandal-cache-v3';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -7,6 +7,8 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
+  // Force the waiting service worker to become the active service worker.
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -17,33 +19,20 @@ self.addEventListener('install', event => {
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
+        // If network request succeeds, clone response to cache and return
+        if (response && response.status === 200 && response.type === 'basic') {
+          const responseToCache = response.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseToCache);
+          });
         }
-        return fetch(event.request).then(
-          function(response) {
-            // Check if we received a valid response
-            if(!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-
-            // IMPORTANT: Clone the response. A response is a stream
-            // and because we want the browser to consume the response
-            // as well as the cache consuming the response, we need
-            // to clone it so we have two streams.
-            var responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then(function(cache) {
-                cache.put(event.request, responseToCache);
-              });
-
-            return response;
-          }
-        );
+        return response;
+      })
+      .catch(() => {
+        // If network fails, try to return from cache
+        return caches.match(event.request);
       })
   );
 });
