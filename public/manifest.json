@@ -1,0 +1,23 @@
+{
+  "name": "Yuva Vikas Mandal",
+  "short_name": "Yuva Mandal",
+  "description": "Premium community and fintech management application.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8F9FE",
+  "theme_color": "#4A148C",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
