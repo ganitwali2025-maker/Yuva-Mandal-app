@@ -380,8 +380,8 @@ const STORAGE_KEY = 'yuva_mandal_settings_v1';
 const CACHE_KEY = 'yuva_mandal_cache_v1';
 
 let settings = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-settings.mandalName = settings.mandalName || 'Yuva Vikas Mandal';
-settings.village = settings.village || 'आपका गाँव / शहर';
+if (!settings.mandalName || settings.mandalName === 'Yuva Vikas Mandal') settings.mandalName = 'YUVA MITRA MANDAL';
+if (!settings.village || settings.village === 'आपका गाँव / शहर') settings.village = 'श्री बजरंग युवा गणेश उत्सव समिति';
 settings.scriptUrl = settings.scriptUrl || '';
 settings.monthlyChandaAmt = settings.monthlyChandaAmt || 100;
 
@@ -526,7 +526,8 @@ function homePage(){
       </div>
     </div>
     <div class="greet">
-      <h1>नमस्ते, साथियों 👋</h1>
+      <div style="font-size:14px; font-weight:700; color:#FFD700; margin-bottom:4px; letter-spacing:0.5px;">श्री गणेशाय नमः</div>
+      <h1 style="margin-top:0;">नमस्ते, साथियों 👋</h1>
       <p>${greetMsg}</p>
     </div>
     <div class="header-wave"></div>
