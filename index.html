@@ -317,30 +317,170 @@
   .btn-primary:disabled{opacity:.6;}
 
   /* ---------- ID CARD ---------- */
-  .idcard-wrap{padding:26px 20px;}
-  .idcard{
-    background:linear-gradient(135deg,var(--primary-indigo),var(--primary-purple));
-    border-radius:24px;color:#fff;padding:24px;position:relative;overflow:hidden;
-    box-shadow:0 14px 30px rgba(49,27,146,0.3);
+  .idcard-wrap {
+    padding: 26px 20px;
+    display: flex;
+    justify-content: center;
   }
-  .idcard::before{
-    content:'';position:absolute;right:-50px;top:-50px;width:180px;height:180px;
-    border-radius:50%;background:rgba(255,255,255,0.06);
+  
+  .new-idcard {
+    width: 100%;
+    max-width: 380px;
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
   }
-  .idcard-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;}
-  .idcard-org{font-size:12px;font-weight:700;letter-spacing:.5px;opacity:.9;}
-  .idcard-id{font-family:'Poppins';font-size:12px;background:rgba(255,255,255,0.15);padding:4px 12px;border-radius:20px;}
-  .idcard-photo{
-    width:72px;height:72px;border-radius:20px;background:rgba(255,255,255,0.15);
-    display:flex;align-items:center;justify-content:center;font-family:'Poppins';
-    font-weight:700;font-size:28px;margin-top:20px;
+  
+  .new-idcard-header {
+    background: #ff7600;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    border-bottom: 2px solid rgba(255,255,255,0.2);
   }
-  .idcard-name{font-family:'Poppins';font-weight:700;font-size:22px;margin-top:16px;}
-  .idcard-role{font-size:13px;opacity:.85;margin-top:2px;}
-  .idcard-grid{display:flex;gap:24px;margin-top:20px;position:relative;}
-  .idcard-grid div .k{font-size:11px;opacity:.75;}
-  .idcard-grid div .v{font-size:13px;font-weight:600;margin-top:4px;}
-  .idcard-strip{height:8px;background:linear-gradient(90deg,var(--primary-orange),#fff 34%,var(--green) 66%);margin-top:24px;border-radius:4px;}
+  
+  .new-idcard-logo {
+    width: 56px;
+    height: 56px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  
+  .new-idcard-header-text {
+    flex: 1;
+  }
+  
+  .new-idcard-header-text h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    line-height: 1.2;
+  }
+  
+  .new-idcard-header-text p {
+    font-size: 11px;
+    margin: 0;
+    opacity: 0.9;
+    border-top: 1px solid rgba(255,255,255,0.3);
+    padding-top: 4px;
+    text-align: center;
+    font-weight: 500;
+  }
+  
+  .new-idcard-body {
+    padding: 24px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background-color: #fafafa;
+  }
+  
+  .new-idcard-photo-container {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 3px solid #ff7600;
+    padding: 3px;
+    flex-shrink: 0;
+    background: white;
+    box-shadow: 0 4px 10px rgba(255, 118, 0, 0.2);
+  }
+  
+  .new-idcard-photo-container img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .new-idcard-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .new-idcard-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px dashed #e2e8f0;
+    padding-bottom: 8px;
+  }
+  
+  .new-idcard-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  
+  .new-idcard-icon-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 65px;
+    flex-shrink: 0;
+  }
+  
+  .new-idcard-icon-box {
+    width: 24px;
+    height: 24px;
+    background: #ff7600;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+  
+  .new-idcard-icon-box svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .new-idcard-icon-label .label {
+    font-size: 12.5px;
+    color: #64748b;
+    font-weight: 600;
+  }
+  
+  .new-idcard-separator {
+    width: 1px;
+    height: 16px;
+    background: #cbd5e1;
+  }
+  
+  .new-idcard-value {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+  }
+  
+  .new-idcard-value.highlight-orange {
+    color: #ff7600;
+  }
+  
+  .new-idcard-footer {
+    background: #ff7600;
+    color: white;
+    padding: 14px;
+    text-align: center;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+  }
 
   /* ---------- SETTINGS ---------- */
   .settings-box{background:#fff;border-radius:20px;padding:20px;margin:16px 20px;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,0.03);}
@@ -660,7 +800,7 @@ function addMemberForm(){
 
 /* ======================= ID CARD ======================= */
 function idCardPage(id){
-  const m = DB.members.find(x=>String(x.ID)===String(id)) || {ID:'—', Name:'नया सदस्य', Mobile:'-', Village:settings.village, JoinDate:todayStr()};
+  const m = DB.members.find(x=>String(x.ID)===String(id)) || {ID:'—', Name:'Devendra Nishad', Mobile:'79743 59208', Village:'ग्राम पंचायत नगरगांव धरसींवा रायपुर छत्तीसगढ़ - 493111', JoinDate:todayStr()};
   const paid = DB.chanda.filter(c=>String(c.MemberID)===String(m.ID)).reduce((s,r)=>s+Number(r.Amount||0),0);
   return `
   <div class="page-head">
@@ -668,19 +808,76 @@ function idCardPage(id){
     <div><h1>सदस्य पहचान पत्र</h1><p>Member ID Card</p></div>
   </div>
   <div class="idcard-wrap">
-    <div class="idcard">
-      <div class="idcard-top">
-        <div class="idcard-org">${settings.mandalName.toUpperCase()}</div>
-        <div class="idcard-id">ID: ${String(m.ID).padStart(3,'0')}</div>
+    <div class="new-idcard">
+      <div class="new-idcard-header">
+        <div class="new-idcard-logo">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #ff7000;">
+            <path d="M12 2a8 8 0 0 0-8 8c0 5.4 7.05 11.5 7.35 11.76a1 1 0 0 0 1.3 0C13 21.5 20 15.4 20 10a8 8 0 0 0-8-8z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+        </div>
+        <div class="new-idcard-header-text">
+          <h2>जय बजरंग युवा गणेश उत्सव समिति</h2>
+          <p>एकता • सेवा • संस्कार • विकास</p>
+        </div>
       </div>
-      <div class="idcard-photo">${initials(m.Name)}</div>
-      <div class="idcard-name">${m.Name}</div>
-      <div class="idcard-role">सक्रिय सदस्य · ${m.Village||settings.village}</div>
-      <div class="idcard-grid">
-        <div><div class="k">मोबाइल</div><div class="v">${m.Mobile||'-'}</div></div>
-        <div><div class="k">जुड़ने की तारीख</div><div class="v">${fdate(m.JoinDate)}</div></div>
+      
+      <div class="new-idcard-body">
+        <div class="new-idcard-photo-container">
+          <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(m.Name)}&background=f1f5f9&color=64748b&size=120" alt="Profile" />
+        </div>
+        
+        <div class="new-idcard-details">
+          <div class="new-idcard-row">
+            <div class="new-idcard-icon-label">
+              <div class="new-idcard-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              </div>
+              <span class="label">नाम</span>
+            </div>
+            <div class="new-idcard-separator"></div>
+            <div class="new-idcard-value">${m.Name}</div>
+          </div>
+          
+          <div class="new-idcard-row">
+            <div class="new-idcard-icon-label">
+              <div class="new-idcard-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+              </div>
+              <span class="label">पद</span>
+            </div>
+            <div class="new-idcard-separator"></div>
+            <div class="new-idcard-value highlight-orange">कोषाध्यक्ष</div>
+          </div>
+          
+          <div class="new-idcard-row">
+            <div class="new-idcard-icon-label">
+              <div class="new-idcard-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              </div>
+              <span class="label">आयु</span>
+            </div>
+            <div class="new-idcard-separator"></div>
+            <div class="new-idcard-value">23</div>
+          </div>
+          
+          <div class="new-idcard-row">
+            <div class="new-idcard-icon-label">
+              <div class="new-idcard-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              </div>
+              <span class="label">मोबाइल</span>
+            </div>
+            <div class="new-idcard-separator"></div>
+            <div class="new-idcard-value">${m.Mobile}</div>
+          </div>
+        </div>
       </div>
-      <div class="idcard-strip"></div>
+      
+      <div class="new-idcard-footer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; margin-right: 6px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <span>${m.Village}</span>
+      </div>
     </div>
     <div class="settings-box" style="margin:16px 0 0;">
       <h3>अब तक जमा चंदा</h3>
