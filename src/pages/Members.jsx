@@ -52,7 +52,7 @@ export default function Members() {
                 <div className="row-main">
                   <div className="t1">{m.Name}</div>
                   <div className="t2">
-                    ID: {m.ID} · {m.Mobile || '-'}
+                    {m.Pad || 'सदस्य'} · {m.Mobile || '-'}
                   </div>
                 </div>
                 <div style={{ color: 'var(--muted)', fontSize: '16px' }}>›</div>

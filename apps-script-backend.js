@@ -120,7 +120,7 @@ function initializeSheets() {
 
   // Create Members sheet
   createSheetIfNotExists(ss, SHEET_NAMES.members, [
-    ['ID', 'Name', 'Mobile', 'Village', 'JoinDate', 'Status']
+    ['ID', 'Name', 'Pad', 'Age', 'Mobile', 'Address', 'Photo', 'Status']
   ]);
 
   // Create Chanda sheet

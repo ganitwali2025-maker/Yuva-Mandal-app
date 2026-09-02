@@ -1,20 +1,19 @@
 import { useParams } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
-import { fdate, todayStr } from '../utils/helpers';
 import PageHeader from '../components/layout/PageHeader';
 import BottomNav from '../components/layout/BottomNav';
 
 export default function IdCard() {
   const { id } = useParams();
-  const { db, settings } = useApp();
+  const { db } = useApp();
 
   const member =
     db.members.find((x) => String(x.ID) === String(id)) || {
-      ID: '—',
       Name: 'Devendra Nishad',
+      Pad: 'सदस्य',
+      Age: '23',
       Mobile: '79743 59208',
-      Village: 'ग्राम पंचायत नगरगांव धरसींवा रायपुर छत्तीसगढ़ - 493111',
-      JoinDate: todayStr(),
+      Photo: '',
     };
 
   return (
@@ -36,7 +35,7 @@ export default function IdCard() {
           <div className="new-idcard-body">
             <div className="new-idcard-photo-container">
               {/* If we have a photo we show it, else generic */}
-              <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(member.Name)}&background=f1f5f9&color=64748b&size=120`} alt="Profile" />
+              <img src={member.Photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.Name)}&background=f1f5f9&color=64748b&size=120`} alt="Profile" />
             </div>
             
             <div className="new-idcard-details">
@@ -59,7 +58,7 @@ export default function IdCard() {
                   <span className="label">पद</span>
                 </div>
                 <div className="new-idcard-separator"></div>
-                <div className="new-idcard-value highlight-orange">कोषाध्यक्ष</div>
+                <div className="new-idcard-value highlight-orange">{member.Pad || 'सदस्य'}</div>
               </div>
               
               <div className="new-idcard-row">
@@ -70,7 +69,7 @@ export default function IdCard() {
                   <span className="label">आयु</span>
                 </div>
                 <div className="new-idcard-separator"></div>
-                <div className="new-idcard-value">23</div>
+                <div className="new-idcard-value">{member.Age || '-'}</div>
               </div>
               
               <div className="new-idcard-row">
