@@ -87,7 +87,7 @@ export default function IdCard() {
           </div>
           
           <div className="new-idcard-footer">
-            <span>ग्राम एवं पोस्ट - नगरगांव, धरसींवा, रायपुर</span>
+            <span style={{ fontWeight: 700, fontSize: '13px' }}>पता - ग्राम पोस्ट - नगरगांव, धरसींवा, रायपुर - 493111</span>
           </div>
         </div>
       </div>
