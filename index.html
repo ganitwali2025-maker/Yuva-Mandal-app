@@ -1000,48 +1000,113 @@ function idCardPage(id){
 
 /* ======================= CHANDA ======================= */
 function chandaPage(){
-  const t = totals();
   return `
-  <div class="page-head">
-    <button class="back-btn" data-nav="home"><span class="material-symbols-outlined" style="font-size:20px;">arrow_back</span></button>
-    <div><h1>मासिक चंदा</h1><p>Monthly Contribution</p></div>
+  <style>
+    .pay-mode-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; padding:12px; border:1px solid #cbd5e1; background:#fff; border-radius:8px; cursor:pointer; position:relative; transition: all 0.2s; }
+    .pay-mode-btn.active { border-color: #311b92; background: #f5f3ff; }
+    .pay-mode-btn .pm-radio { position:absolute; top:8px; left:8px; width:16px; height:16px; border-radius:50%; border:1px solid #cbd5e1; display:flex; align-items:center; justify-content:center; transition: all 0.2s; }
+    .pay-mode-btn.active .pm-radio { border-color: #311b92; }
+    .pay-mode-btn .pm-radio-inner { width:8px; height:8px; border-radius:50%; background:transparent; transition: all 0.2s; }
+    .pay-mode-btn.active .pm-radio-inner { background: #311b92; }
+    .pay-mode-btn .pm-icon { font-size:28px; color:#64748b; font-weight:bold; transition: all 0.2s; }
+    .pay-mode-btn.active .pm-icon { color: #311b92; }
+    .pay-mode-btn .pm-text { font-size:13px; font-weight:600; color:#64748b; transition: all 0.2s; }
+    .pay-mode-btn.active .pm-text { color: #311b92; }
+  </style>
+  <div class="page-head" style="background: #311b92; color: white; padding: 16px 20px 24px; border-radius: 0 0 16px 16px; display: flex; align-items: center; gap: 16px;">
+    <button class="back-btn" data-nav="home" style="background: rgba(255,255,255,0.15); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><span class="material-symbols-outlined">arrow_back</span></button>
+    <h1 style="color:white; font-size:20px; margin:0; font-weight: 700;">मासिक जमा</h1>
   </div>
-  <div class="content" style="padding-top:14px;">
-    <div class="settings-box" style="margin:0 0 16px;">
-      <h3>कुल चंदा संग्रह</h3>
-      <p style="margin-bottom:0;color:var(--green);font-family:Poppins;font-weight:800;font-size:22px;">${fmt(t.chandaTotal)}</p>
-    </div>
-    <h3 style="font-size:13.5px;margin-bottom:10px;">नई एंट्री जोड़ें</h3>
-    <div class="field"><label>सदस्य चुनें</label>
-      <select id="c_member">
-        <option value="">-- सदस्य चुनें --</option>
-        ${DB.members.map(m=>`<option value="${m.ID}">${m.Name} (ID ${m.ID})</option>`).join('')}
-      </select>
-    </div>
-    <div style="display:flex;gap:10px;">
-      <div class="field" style="flex:1;"><label>महीना</label>
-        <select id="c_month">${['जनवरी','फ़रवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'].map((mm,i)=>`<option ${i===new Date().getMonth()?'selected':''}>${mm}</option>`).join('')}</select>
+  
+  <div class="content" style="padding: 20px; background: #f8fafc; min-height: calc(100vh - 80px);">
+    <div style="background: white; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
+      
+      <div style="margin-bottom: 20px;">
+        <label style="display:block; font-size:14px; font-weight:700; color:#1e293b; margin-bottom:8px;">1. सदस्य चुनें <span style="color:red;">*</span></label>
+        <div style="position:relative;">
+          <span class="material-symbols-outlined" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#64748b;">person</span>
+          <select id="c_member" style="width:100%; padding:12px 12px 12px 40px; border:1px solid #311b92; border-radius:8px; font-family:inherit; font-size:14px; background:#fff; appearance:none; outline:none; box-shadow:0 2px 8px rgba(49,27,146,0.05); color:#1e293b; font-weight: 500;">
+            <option value="">सदस्य का नाम चुनें...</option>
+            ${DB.members.map(m=>`<option value="${m.ID}">${m.Name}</option>`).join('')}
+          </select>
+          <span class="material-symbols-outlined" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:#64748b; pointer-events:none;">expand_more</span>
+        </div>
       </div>
-      <div class="field" style="flex:1;"><label>वर्ष</label><input id="c_year" type="number" value="${new Date().getFullYear()}"></div>
-    </div>
-    <div class="field"><label>राशि (₹)</label><input id="c_amount" type="number" value="${settings.monthlyChandaAmt}"></div>
-    <div class="field"><label>तारीख</label><input id="c_date" type="date" value="${todayStr()}"></div>
-    <div class="field"><label>माध्यम</label>
-      <select id="c_mode"><option>Cash</option><option>UPI</option><option>Bank Transfer</option></select>
-    </div>
-    <button class="btn-primary" id="saveChandaBtn">चंदा दर्ज करें</button>
 
-    <div class="section-title"><h2>हाल की एंट्री</h2></div>
-    ${DB.chanda.length===0 ? `<div class="empty">कोई एंट्री नहीं</div>` :
-      `<div class="card-list">${[...DB.chanda].reverse().slice(0,15).map(r=>`
-        <div class="row-card">
-          <div class="avatar">${initials(r.MemberName)}</div>
-          <div class="row-main"><div class="t1">${r.MemberName}</div><div class="t2">${r.Month} ${r.Year} · ${r.Mode||''}</div></div>
-          <div class="row-amt in">+${fmt(r.Amount)}</div>
-        </div>`).join('')}</div>`
-    }
+      <div id="c_member_details" style="display:none; background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); border: 1px solid #f1f5f9;">
+        <h4 style="margin:0 0 12px 0; color:#311b92; font-size:14px; font-weight: 700;">सदस्य विवरण</h4>
+        <div style="display:flex; align-items:center; gap:16px;">
+          <div id="c_member_avatar" style="width:56px; height:56px; border-radius:50%; background:#ede9fe; color:#311b92; font-weight:bold; font-size:18px; display:flex; align-items:center; justify-content:center; overflow:hidden;"></div>
+          <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; align-items:center; gap:8px; border-bottom:1px solid #f1f5f9; padding-bottom:6px;">
+              <span class="material-symbols-outlined" style="font-size:16px; color:#64748b;">person</span>
+              <span style="font-size:12px; color:#64748b; width:36px;">नाम:</span>
+              <span id="c_member_name" style="font-size:13px; font-weight:700; color:#1e293b;">-</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; border-bottom:1px solid #f1f5f9; padding-bottom:6px;">
+              <span class="material-symbols-outlined" style="font-size:16px; color:#64748b;">call</span>
+              <span style="font-size:12px; color:#64748b; width:36px;">फोन:</span>
+              <span id="c_member_phone" style="font-size:13px; font-weight:500; color:#1e293b;">-</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="material-symbols-outlined" style="font-size:16px; color:#64748b;">verified_user</span>
+              <span style="font-size:12px; color:#64748b; width:36px;">पद:</span>
+              <span id="c_member_pad" style="font-size:13px; font-weight:600; color:#1e293b; text-transform:uppercase;">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <label style="display:block; font-size:14px; font-weight:700; color:#1e293b; margin-bottom:8px;">2. माह <span style="color:red;">*</span></label>
+        <div style="position:relative;">
+          <span class="material-symbols-outlined" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#311b92;">calendar_month</span>
+          <select id="c_month" style="width:100%; padding:12px 12px 12px 40px; border:1px solid #cbd5e1; border-radius:8px; font-family:inherit; font-size:14px; background:#fff; appearance:none; outline:none; color:#1e293b; font-weight:500;">
+            <option value="">माह चुनें...</option>
+            ${['जनवरी','फ़रवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'].map((mm,i)=>`<option ${i===new Date().getMonth()?'selected':''}>${mm}</option>`).join('')}
+          </select>
+          <span class="material-symbols-outlined" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); color:#64748b; pointer-events:none;">expand_more</span>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <label style="display:block; font-size:14px; font-weight:700; color:#1e293b; margin-bottom:8px;">3. राशि (₹) <span style="color:red;">*</span></label>
+        <div style="position:relative;">
+          <span style="position:absolute; left:16px; top:50%; transform:translateY(-50%); color:#1e293b; font-weight:bold; font-size:16px;">₹</span>
+          <input id="c_amount" type="number" placeholder="राशि दर्ज करें" value="${settings.monthlyChandaAmt}" style="width:100%; padding:12px 12px 12px 40px; border:1px solid #cbd5e1; border-radius:8px; font-family:inherit; font-size:14px; background:#fff; outline:none; color:#1e293b; font-weight:600;">
+        </div>
+      </div>
+
+      <div style="margin-bottom: 30px;">
+        <label style="display:block; font-size:14px; font-weight:700; color:#1e293b; margin-bottom:8px;">4. भुगतान माध्यम <span style="color:red;">*</span></label>
+        <div style="display:flex; gap:12px;">
+          <div class="pay-mode-btn active" data-mode="Cash">
+            <div class="pm-radio"><div class="pm-radio-inner"></div></div>
+            <span class="material-symbols-outlined pm-icon" style="font-size:32px;">payments</span>
+            <span class="pm-text">नकद (Cash)</span>
+          </div>
+          <div class="pay-mode-btn" data-mode="UPI">
+            <div class="pm-radio"><div class="pm-radio-inner"></div></div>
+            <span class="pm-icon" style="font-size:28px; font-style:italic;">UPI</span>
+            <span class="pm-text">यूपीआई (UPI)</span>
+          </div>
+        </div>
+        <input type="hidden" id="c_mode" value="Cash">
+      </div>
+      
+      <!-- Hidden fields to keep backend happy -->
+      <input type="hidden" id="c_year" value="${new Date().getFullYear()}">
+      <input type="hidden" id="c_date" value="${todayStr()}">
+
+      <button id="saveChandaBtn" style="width:100%; background:#311b92; color:#fff; border:none; padding:14px; border-radius:8px; font-size:16px; font-weight:600; font-family:inherit; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 4px 12px rgba(49,27,146,0.3); cursor:pointer;">
+        <span class="material-symbols-outlined">save</span> सबमिट करें
+      </button>
+      
+      <div style="text-align:center; margin-top:16px; display:flex; align-items:center; justify-content:center; gap:4px; color:#64748b;">
+        <span class="material-symbols-outlined" style="font-size:14px;">lock</span> <span style="font-size:12px;">आपका डेटा सुरक्षित है</span>
+      </div>
+    </div>
   </div>
-  ${navBar('chanda')}
   `;
 }
 
