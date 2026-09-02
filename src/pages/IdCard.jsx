@@ -24,11 +24,8 @@ export default function IdCard() {
       <div className="idcard-wrap">
         <div className="new-idcard">
           <div className="new-idcard-header">
-            <div className="new-idcard-logo">
-              {/* Using a placeholder SVG or Ganesh icon placeholder */}
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '24px', height: '24px', color: '#ff7600' }}>
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
+            <div className="new-idcard-logo" style={{ color: '#ff7600', fontSize: '30px', fontWeight: 'bold', lineHeight: '1', paddingBottom: '4px' }}>
+              ॐ
             </div>
             <div className="new-idcard-header-text">
               <h2>जय बजरंग युवा गणेश उत्सव समिति</h2>
@@ -90,7 +87,7 @@ export default function IdCard() {
           </div>
           
           <div className="new-idcard-footer">
-            <span>{member.Village}</span>
+            <span>ग्राम एवं पोस्ट - नगरगांव, धरसींवा, रायपुर</span>
           </div>
         </div>
       </div>
