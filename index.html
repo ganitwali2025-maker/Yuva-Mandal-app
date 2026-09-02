@@ -752,30 +752,47 @@ function membersPage(){
   const q = (route.q||'').toLowerCase();
   const list = DB.members.filter(m => !q || (m.Name||'').toLowerCase().includes(q) || String(m.ID).includes(q));
   return `
-  <div class="page-head">
-    <button class="back-btn" data-nav="home"><span class="material-symbols-outlined" style="font-size:20px;">arrow_back</span></button>
-    <div><h1>सदस्य सूची</h1><p>${DB.members.length} कुल सदस्य</p></div>
+  <div class="page-head" style="background: #311b92; color: white; padding: 24px 20px 40px; border-radius: 0 0 20px 20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div style="display:flex; align-items:center; gap: 12px;">
+        <button class="back-btn" data-nav="home" style="background: rgba(255,255,255,0.15); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><span class="material-symbols-outlined" style="font-size:20px;">arrow_back</span></button>
+        <div><h1 style="color:white; font-size:18px; margin:0;">सदस्य चुनें</h1><p style="color:rgba(255,255,255,0.8); font-size:12px; margin:0;">कुल सदस्य: ${DB.members.length}</p></div>
+      </div>
+      <span class="material-symbols-outlined" style="color:white;">group</span>
+    </div>
   </div>
-  <div class="search-bar">
-    <span class="material-symbols-outlined" style="color:var(--muted);font-size:20px;">search</span>
-    <input id="memberSearch" placeholder="नाम या ID से खोजें..." value="${route.q||''}">
+  <div class="search-bar" style="margin: -24px 20px 20px; background: white; padding: 12px 16px; border-radius: 12px; display: flex; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); gap: 10px;">
+    <span class="material-symbols-outlined" style="color:#64748b;font-size:20px;">search</span>
+    <input id="memberSearch" placeholder="नाम से खोजें..." value="${route.q||''}" style="border:none; outline:none; flex:1; font-family:inherit; font-size:14px; background:transparent; color:#1e293b;">
+    <span class="material-symbols-outlined" style="color:#64748b;font-size:20px;">filter_alt</span>
   </div>
-  <div class="content" style="padding-top:6px;">
+  
+  <div style="padding: 0 20px 12px; display: flex; justify-content: space-between; align-items: center;">
+    <h3 style="margin:0; font-size: 15px; font-weight: 700; color: #311b92;">सदस्य सूची</h3>
+    <span style="font-size: 12px; color: #64748b;">कुल ${DB.members.length} सदस्य</span>
+  </div>
+
+  <div class="content" style="padding-top:0;">
     ${list.length===0 ? `<div class="empty"><div class="e-ic"><span class="material-symbols-outlined" style="font-size:36px;color:var(--muted)">groups</span></div>अभी कोई सदस्य नहीं जुड़ा<br><br><button class="btn-primary" style="width:auto;padding:10px 20px;display:flex;align-items:center;margin:0 auto;" data-nav="addMember"><span class="material-symbols-outlined" style="margin-right:6px;font-size:18px;">person_add</span>सदस्य जोड़ें</button></div>` :
       `<div class="card-list">
         ${list.map(m=>`
-          <div class="row-card" data-nav="idcard" data-id="${m.ID}">
-            <div class="avatar">${initials(m.Name)}</div>
-            <div class="row-main">
-              <div class="t1">${m.Name}</div>
-              <div class="t2">${m.Pad||'सदस्य'} · ${m.Mobile||'-'}</div>
+          <div class="row-card" data-nav="idcard" data-id="${m.ID}" style="background: white; border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border: none;">
+            <div class="avatar" style="width: 48px; height: 48px; border-radius: 50%; background: #ede9fe; color: #311b92; font-weight: bold; font-size: 16px; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;">
+              ${m.Photo ? `<img src="${m.Photo}" style="width: 100%; height: 100%; object-fit: cover;">` : initials(m.Name)}
             </div>
-            <div style="color:var(--muted);font-size:16px;">›</div>
+            <div class="row-main" style="flex: 1;">
+              <div style="font-weight: 700; font-size: 14px; color: #0f172a; margin-bottom: 4px;">${m.Name}</div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="background: #ede9fe; color: #311b92; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">पद:</span>
+                <span style="font-size: 11px; color: #475569; font-weight: 600; text-transform: uppercase;">${m.Pad||'SADSIYA'}</span>
+              </div>
+            </div>
+            <div style="color: #311b92; font-size: 20px; display: flex; align-items: center;"><span class="material-symbols-outlined">chevron_right</span></div>
           </div>`).join('')}
       </div>`
     }
   </div>
-  <button class="fab" data-nav="addMember"><span class="material-symbols-outlined">add</span></button>
+  <button class="fab" data-nav="addMember" style="background: #311b92; box-shadow: 0 4px 12px rgba(49,27,146,0.3); border-radius: 50%;"><span class="material-symbols-outlined">add</span></button>
   ${navBar('members')}
 
   `;
@@ -911,8 +928,8 @@ function idCardPage(id){
   <div class="idcard-wrap">
     <div class="new-idcard">
       <div class="new-idcard-header">
-        <div class="new-idcard-logo" style="color: #ff7600; font-size: 30px; font-weight: bold; line-height: 1; padding-bottom: 4px;">
-          ॐ
+        <div class="new-idcard-logo" style="width: 54px; height: 54px; margin-bottom: 6px; border-radius: 50%; overflow: hidden; background: #fff; border: 3px solid #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.15); flex-shrink: 0;">
+          <img src="/logo.png" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
         <div class="new-idcard-header-text">
           <h2>जय बजरंग युवा गणेश उत्सव समिति</h2>
