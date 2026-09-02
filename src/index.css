@@ -568,101 +568,167 @@ h3,
 /* ---------- ID CARD ---------- */
 .idcard-wrap {
   padding: 26px 22px;
-}
-
-.idcard {
-  background: linear-gradient(150deg, var(--navy-deep), var(--indigo) 60%, var(--violet));
-  border-radius: 20px;
-  color: #fff;
-  padding: 22px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 14px 30px rgba(30, 25, 90, 0.28);
-}
-
-.idcard::before {
-  content: '';
-  position: absolute;
-  right: -40px;
-  top: -40px;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.idcard-top {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  position: relative;
+  justify-content: center;
 }
 
-.idcard-org {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  opacity: 0.85;
-}
-
-.idcard-id {
-  font-family: 'Poppins';
-  font-size: 11px;
-  background: rgba(255, 255, 255, 0.16);
-  padding: 4px 10px;
-  border-radius: 20px;
-}
-
-.idcard-photo {
-  width: 66px;
-  height: 66px;
+.new-idcard {
+  width: 100%;
+  max-width: 380px;
+  background: #ffffff;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.new-idcard-header {
+  background: #ff7600;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  border-bottom: 2px solid rgba(255,255,255,0.2);
+}
+
+.new-idcard-logo {
+  width: 56px;
+  height: 56px;
+  background: white;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Poppins';
+  flex-shrink: 0;
+}
+
+.new-idcard-header-text {
+  flex: 1;
+}
+
+.new-idcard-header-text h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 17px;
   font-weight: 700;
-  font-size: 24px;
-  margin-top: 16px;
+  margin: 0 0 6px 0;
+  line-height: 1.2;
 }
 
-.idcard-name {
-  font-family: 'Poppins';
-  font-weight: 700;
-  font-size: 19px;
-  margin-top: 12px;
+.new-idcard-header-text p {
+  font-size: 11px;
+  margin: 0;
+  opacity: 0.9;
+  border-top: 1px solid rgba(255,255,255,0.3);
+  padding-top: 4px;
+  text-align: center;
+  font-weight: 500;
 }
 
-.idcard-role {
-  font-size: 12px;
-  opacity: 0.8;
-  margin-top: 2px;
-}
-
-.idcard-grid {
+.new-idcard-body {
+  padding: 24px 16px;
   display: flex;
-  gap: 22px;
-  margin-top: 16px;
-  position: relative;
+  align-items: center;
+  gap: 16px;
+  background-color: #fafafa;
 }
 
-.idcard-grid div .k {
-  font-size: 10px;
-  opacity: 0.7;
+.new-idcard-photo-container {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 3px solid #ff7600;
+  padding: 3px;
+  flex-shrink: 0;
+  background: white;
+  box-shadow: 0 4px 10px rgba(255, 118, 0, 0.2);
 }
 
-.idcard-grid div .v {
-  font-size: 12.5px;
-  font-weight: 600;
-  margin-top: 2px;
+.new-idcard-photo-container img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.idcard-strip {
-  height: 8px;
-  background: linear-gradient(90deg, var(--saffron), #fff 34%, #128035 66%);
-  margin-top: 18px;
+.new-idcard-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.new-idcard-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px dashed #e2e8f0;
+  padding-bottom: 8px;
+}
+
+.new-idcard-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.new-idcard-icon-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 65px;
+  flex-shrink: 0;
+}
+
+.new-idcard-icon-box {
+  width: 24px;
+  height: 24px;
+  background: #ff7600;
   border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.new-idcard-icon-box svg {
+  width: 14px;
+  height: 14px;
+}
+
+.new-idcard-icon-label .label {
+  font-size: 12.5px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.new-idcard-separator {
+  width: 1px;
+  height: 16px;
+  background: #cbd5e1;
+}
+
+.new-idcard-value {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.new-idcard-value.highlight-orange {
+  color: #ff7600;
+}
+
+.new-idcard-footer {
+  background: #ff7600;
+  color: white;
+  padding: 14px;
+  text-align: center;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
 }
 
 /* ---------- SETTINGS ---------- */
