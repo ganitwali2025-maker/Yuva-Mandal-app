@@ -539,6 +539,7 @@ DB.members = DB.members || [];
 DB.mashikJama = DB.mashikJama || DB.chanda || [];
 DB.sahyog = DB.sahyog || [];
 DB.expense = DB.expense || [];
+DB.udharChanda = DB.udharChanda || [];
 delete DB.chanda;
 
 let route = { page: 'home' };
@@ -572,7 +573,9 @@ function totals(){
   const balance = income - expense;
   const mashikJamaTotal = DB.mashikJama.reduce((s,r)=>s+Number(r.Amount||r['राशि (₹)']||0),0);
   const sahyogTotal = DB.sahyog.reduce((s,r)=>s+Number(r.Amount||0),0);
-  return {income, expense, balance, mashikJamaTotal, sahyogTotal};
+  const udharTotal = (DB.udharChanda||[]).reduce((s,r)=>s+Number(r.Amount||0),0);
+  const udharPaid = (DB.udharChanda||[]).filter(r=>r['Paid Status']==='Paid').reduce((s,r)=>s+Number(r.Amount||0),0);
+  return {income, expense, balance, mashikJamaTotal, sahyogTotal, udharTotal, udharPaid};
 }
 
 /* ======================= BACKEND SYNC ======================= */
@@ -587,7 +590,8 @@ async function syncAll(){
         members: data.members || [], 
         mashikJama: data.mashikJama || data.chanda || [], 
         sahyog: data.sahyog || [], 
-        expense: data.expense || [] 
+        expense: data.expense || [],
+        udharChanda: data.udharChanda || []
       };
       saveCache();
       connState = 'online';
@@ -603,7 +607,7 @@ async function syncAll(){
 async function pushRow(type, data){
   if(!settings.scriptUrl){
     // offline fallback: keep locally only
-    const key = {member:'members',mashikJama:'mashikJama',sahyog:'sahyog',expense:'expense'}[type];
+    const key = {member:'members',mashikJama:'mashikJama',sahyog:'sahyog',expense:'expense',udharChanda:'udharChanda'}[type];
     const id = (DB[key].reduce((m,r)=>Math.max(m,Number(r.ID)||0),0)) + 1;
     DB[key].push(Object.assign({ID:id}, data));
     saveCache();
@@ -654,6 +658,7 @@ function pageTemplate(){
     case 'transactions': return transactionsPage();
     case 'sahyog': return sahyogPage();
     case 'expense': return expensePage();
+    case 'udharChanda': return udharChandaPage();
     case 'reports': return reportsPage();
     case 'settings': return settingsPage();
     case 'addMember': return addMemberForm();
@@ -727,6 +732,7 @@ function homePage(){
       ${serviceIcon('mashikJama','account_balance_wallet','green','मासिक जमा')}
       ${serviceIcon('sahyog','volunteer_activism','blue','चंदा/योगदान')}
       ${serviceIcon('expense','receipt_long','red','खर्च दर्ज')}
+      ${serviceIcon('udharChanda','menu_book','orange','उधार चंदा')}
       ${serviceIcon('reports','description','teal','रिपोर्ट देखें')}
       ${serviceIcon('reports','pie_chart','violet','लेन-देन देखें')}
     </div>
@@ -1228,6 +1234,54 @@ function expensePage(){
   `;
 }
 
+/* ======================= UDHAR CHANDA ======================= */
+function udharChandaPage(){
+  const t = totals();
+  const list = DB.udharChanda || [];
+  return `
+  <div class="page-head">
+    <button class="back-btn" data-nav="home"><span class="material-symbols-outlined" style="font-size:20px;">arrow_back</span></button>
+    <div><h1>उधार चंदा</h1><p>Udhar Chanda</p></div>
+  </div>
+  <div class="content" style="padding-top:14px;">
+    <div style="display:flex; gap:10px; margin-bottom:16px;">
+      <div class="settings-box" style="flex:1; margin:0;">
+        <h3 style="font-size:13px;">कुल उधार</h3>
+        <p style="margin:0;color:var(--red);font-family:Poppins;font-weight:800;font-size:18px;">${fmt(t.udharTotal - t.udharPaid)}</p>
+      </div>
+      <div class="settings-box" style="flex:1; margin:0;">
+        <h3 style="font-size:13px;">कुल प्राप्त</h3>
+        <p style="margin:0;color:var(--green);font-family:Poppins;font-weight:800;font-size:18px;">${fmt(t.udharPaid)}</p>
+      </div>
+    </div>
+    
+    <div class="field"><label>तारीख</label><input id="u_date" type="date" value="${todayStr()}"></div>
+    <div class="field"><label>नाम</label><input id="u_name" placeholder="नाम लिखें"></div>
+    <div class="field"><label>राशि (₹)</label><input id="u_amount" type="number" placeholder="0"></div>
+    <div class="field"><label>भुगतान स्थिति</label>
+      <select id="u_status" onchange="document.getElementById('u_pdate_wrap').style.display = this.value==='Paid'?'block':'none'">
+        <option value="Unpaid">Unpaid (बाकी)</option>
+        <option value="Paid">Paid (जमा)</option>
+      </select>
+    </div>
+    <div class="field" id="u_pdate_wrap" style="display:none;"><label>भुगतान की तारीख</label><input id="u_pdate" type="date" value="${todayStr()}"></div>
+    <div class="field"><label>विवरण / रिमार्क</label><input id="u_remark" placeholder="विवरण लिखें"></div>
+    <button class="btn-primary" id="saveUdharBtn">दर्ज करें</button>
+
+    <div class="section-title" style="margin-top:24px;"><h2>हाल की एंट्री</h2></div>
+    ${list.length===0 ? \`<div class="empty">कोई एंट्री नहीं</div>\` :
+      \`<div class="card-list">${\\[...list\\].reverse().slice(0,15).map(r=>\`
+        <div class="row-card">
+          <div class="avatar">\${initials(r.Name)}</div>
+          <div class="row-main"><div class="t1">\${r.Name}</div><div class="t2">\${r.Date} · <span style="color:\${r['Paid Status']==='Paid'?'var(--green)':'var(--red)'}">\${r['Paid Status']}</span></div></div>
+          <div class="row-amt \${r['Paid Status']==='Paid'?'in':'out'}">\${fmt(r.Amount)}</div>
+        </div>\`).join('')}</div>\`
+    }
+  </div>
+  ${navBar('home')}
+  \`;
+}
+
 /* ======================= REPORTS ======================= */
 function reportsPage(){
   const tab = route.repTab || 'summary';
@@ -1261,6 +1315,10 @@ function reportsPage(){
           <div><div style="font-size:12px; color:#64748b; font-weight:600;">कुल बैलेंस</div><div style="font-size:16px; font-weight:800; color:#0f172a; margin-top:4px;">${fmt(t.balance)}</div></div>
         </div>
         <div style="background:white; padding:16px; border-radius:12px; border:1px solid #f1f5f9; box-shadow:0 2px 8px rgba(0,0,0,0.02); display:flex; align-items:center; gap:12px;">
+          <div style="width:40px; height:40px; border-radius:8px; background:#fef3c7; display:flex; align-items:center; justify-content:center; color:#d97706;"><span class="material-symbols-outlined">menu_book</span></div>
+          <div><div style="font-size:12px; color:#64748b; font-weight:600;">उधार (प्राप्त / कुल)</div><div style="font-size:14px; font-weight:800; color:#d97706; margin-top:4px;">${fmt(t.udharPaid)} / ${fmt(t.udharTotal)}</div></div>
+        </div>
+        <div style="background:white; padding:16px; border-radius:12px; border:1px solid #f1f5f9; box-shadow:0 2px 8px rgba(0,0,0,0.02); display:flex; align-items:center; gap:12px;">
           <div style="width:40px; height:40px; border-radius:8px; background:#ccfbf1; display:flex; align-items:center; justify-content:center; color:#0d9488;"><span class="material-symbols-outlined">description</span></div>
           <div><div style="font-size:12px; color:#64748b; font-weight:600;">कुल सदस्य</div><div style="font-size:16px; font-weight:800; color:#0d9488; margin-top:4px;">${DB.members.length}</div></div>
         </div>
@@ -1287,17 +1345,24 @@ function reportsPage(){
           <div style="font-size:11px; color:#64748b;">कुल फाइल्स<br><span style="font-size:14px; font-weight:700; color:#0f172a;">${DB.expense.length}</span></div>
           <button data-reptab="expense" style="margin-top:8px; width:100%; padding:8px; border-radius:8px; border:none; background:#f3e8ff; color:#9333ea; font-size:12px; font-weight:700; cursor:pointer;">खोलें</button>
         </div>
+        <div style="min-width:140px; background:white; padding:16px; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 2px 10px rgba(0,0,0,0.02); display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;"><span class="material-symbols-outlined" style="font-size:32px; color:#f59e0b;">folder</span><span class="material-symbols-outlined" style="font-size:16px; color:#94a3b8;">more_vert</span></div>
+          <div style="font-size:14px; font-weight:700; color:#0f172a; margin-top:8px;">Udhar Chanda</div>
+          <div style="font-size:11px; color:#64748b;">कुल फाइल्स<br><span style="font-size:14px; font-weight:700; color:#0f172a;">${(DB.udharChanda||[]).length}</span></div>
+          <button data-reptab="udharChanda" style="margin-top:8px; width:100%; padding:8px; border-radius:8px; border:none; background:#fef3c7; color:#d97706; font-size:12px; font-weight:700; cursor:pointer;">खोलें</button>
+        </div>
       </div>`;
   } else {
     const map = {members:['ID','Name','Mobile','Village','JoinDate','Status'],
                  mashikJama:['ID','दिनांक','माह','सदस्य का नाम','फोन नंबर','पद','राशि (₹)','भुगतान माध्यम','एंट्री दिनांक','एंट्री समय'],
                  sahyog:['ID','DonorName','Purpose','Amount','Date'],
-                 expense:['ID','Date','Category','Description','Amount','PaidTo']};
+                 expense:['ID','Date','Category','Description','Amount','PaidTo'],
+                 udharChanda:['ID','Date','Name','Amount','Paid Status','Paid Date','Remark']};
     const cols = map[tab];
     const rows = DB[tab] || [];
     body = `
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-        <h2 style="font-size:18px; color:#311b92; margin:0;">${{members:'सदस्य',mashikJama:'मासिक जमा',sahyog:'सहयोग',expense:'खर्च'}[tab] || tab} डेटा</h2>
+        <h2 style="font-size:18px; color:#311b92; margin:0;">${{members:'सदस्य',mashikJama:'मासिक जमा',sahyog:'सहयोग',expense:'खर्च',udharChanda:'उधार चंदा'}[tab] || tab} डेटा</h2>
         <button data-reptab="summary" style="background:#f1f5f9; border:none; padding:6px 12px; border-radius:20px; font-size:12px; font-weight:600; color:#475569; display:flex; align-items:center; gap:4px; cursor:pointer; transition: background 0.2s;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'"><span class="material-symbols-outlined" style="font-size:14px;">arrow_back</span> समरी पर लौटें</button>
       </div>
       <div style="background:white; border-radius:12px; border:1px solid #f1f5f9; box-shadow:0 2px 10px rgba(0,0,0,0.02); overflow:hidden;">
@@ -1528,6 +1593,27 @@ function bindEvents(){
         Date: document.getElementById('e_date').value,
       });
       toast('खर्च दर्ज हो गया ✅');
+      render();
+    });
+  }
+
+  const saveUdharBtn = document.getElementById('saveUdharBtn');
+  if(saveUdharBtn){
+    saveUdharBtn.addEventListener('click', async ()=>{
+      const name = document.getElementById('u_name').value.trim();
+      const amount = document.getElementById('u_amount').value;
+      if(!name || !amount){ toast('नाम और राशि भरें'); return; }
+      saveUdharBtn.disabled = true; saveUdharBtn.textContent = 'सेव हो रहा है...';
+      const status = document.getElementById('u_status').value;
+      await pushRow('udharChanda', {
+        Name: name,
+        Amount: amount,
+        'Paid Status': status,
+        'Paid Date': status === 'Paid' ? (document.getElementById('u_pdate') ? document.getElementById('u_pdate').value : document.getElementById('u_date').value) : '',
+        Remark: document.getElementById('u_remark').value.trim(),
+        Date: document.getElementById('u_date').value,
+      });
+      toast('उधार चंदा दर्ज हो गया ✅');
       render();
     });
   }
