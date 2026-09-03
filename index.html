@@ -1266,56 +1266,26 @@ function reportsPage(){
         </div>
       </div>
 
-      <!-- Section 2: Report Files removed as requested -->
-
-      <!-- Section 3: Data Sheet -->
-      <h2 style="font-size:16px; color:#1e293b; font-weight:700; margin-bottom:12px;">डेटा शीट</h2>
-      <div style="background:white; border-radius:12px; border:1px solid #f1f5f9; box-shadow:0 2px 10px rgba(0,0,0,0.02); overflow:hidden; margin-bottom:24px;">
-        <div style="overflow-x:auto;">
-          <table style="width:100%; border-collapse:collapse; min-width:500px;">
-            <thead>
-              <tr style="background:#f3e8ff; color:#311b92;">
-                <th style="padding:12px; font-size:12px; font-weight:700; text-align:center;">SN</th>
-                <th style="padding:12px; font-size:12px; font-weight:700; text-align:left;">शीट का नाम</th>
-                <th style="padding:12px; font-size:12px; font-weight:700; text-align:left;">प्रकार</th>
-                <th style="padding:12px; font-size:12px; font-weight:700; text-align:left;">महिना / विवरण</th>
-                <th style="padding:12px; font-size:12px; font-weight:700; text-align:center;">कुल एंट्री</th>
-                <th style="padding:12px; font-size:12px; font-weight:700; text-align:right;">पास की गई रकम</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr data-reptab="mashikJama" style="border-bottom:1px solid #f1f5f9; cursor:pointer; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
-                <td style="padding:12px; font-size:13px; text-align:center; color:#0f172a;">1</td>
-                <td style="padding:12px; font-size:13px; font-weight:600; color:#0f172a; display:flex; align-items:center; gap:8px;"><span class="material-symbols-outlined" style="color:#22c55e; font-size:18px;">description</span> मासिक जमा</td>
-                <td style="padding:12px; font-size:13px; color:#64748b;">जमा</td><td style="padding:12px; font-size:13px; color:#64748b;">${currentMonthYear}</td><td style="padding:12px; font-size:13px; text-align:center; color:#64748b;">${DB.mashikJama.length}</td><td style="padding:12px; font-size:13px; font-weight:600; color:#16a34a; text-align:right;">${fmt(t.mashikJamaTotal)}</td>
-              </tr>
-              <tr data-reptab="sahyog" style="border-bottom:1px solid #f1f5f9; cursor:pointer; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
-                <td style="padding:12px; font-size:13px; text-align:center; color:#0f172a;">2</td>
-                <td style="padding:12px; font-size:13px; font-weight:600; color:#0f172a; display:flex; align-items:center; gap:8px;"><span class="material-symbols-outlined" style="color:#f97316; font-size:18px;">description</span> चंदा सूची</td>
-                <td style="padding:12px; font-size:13px; color:#64748b;">चंदा</td><td style="padding:12px; font-size:13px; color:#64748b;">${currentMonthYear}</td><td style="padding:12px; font-size:13px; text-align:center; color:#64748b;">${DB.sahyog.length}</td><td style="padding:12px; font-size:13px; font-weight:600; color:#16a34a; text-align:right;">${fmt(t.sahyogTotal)}</td>
-              </tr>
-              <tr data-reptab="expense" style="border-bottom:1px solid #f1f5f9; cursor:pointer; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
-                <td style="padding:12px; font-size:13px; text-align:center; color:#0f172a;">3</td>
-                <td style="padding:12px; font-size:13px; font-weight:600; color:#0f172a; display:flex; align-items:center; gap:8px;"><span class="material-symbols-outlined" style="color:#8b5cf6; font-size:18px;">description</span> खर्च विवरण</td>
-                <td style="padding:12px; font-size:13px; color:#64748b;">खर्च</td><td style="padding:12px; font-size:13px; color:#64748b;">${currentMonthYear}</td><td style="padding:12px; font-size:13px; text-align:center; color:#64748b;">${DB.expense.length}</td><td style="padding:12px; font-size:13px; font-weight:600; color:#dc2626; text-align:right;">${fmt(t.expense)}</td>
-              </tr>
-              <tr data-reptab="members" style="border-bottom:1px solid #f1f5f9; cursor:pointer; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
-                <td style="padding:12px; font-size:13px; text-align:center; color:#0f172a;">4</td>
-                <td style="padding:12px; font-size:13px; font-weight:600; color:#0f172a; display:flex; align-items:center; gap:8px;"><span class="material-symbols-outlined" style="color:#3b82f6; font-size:18px;">description</span> सदस्य सूची</td>
-                <td style="padding:12px; font-size:13px; color:#64748b;">सदस्य</td><td style="padding:12px; font-size:13px; color:#64748b;">${currentMonthYear}</td><td style="padding:12px; font-size:13px; text-align:center; color:#64748b;">${DB.members.length}</td><td style="padding:12px; font-size:13px; font-weight:600; color:#16a34a; text-align:right;">-</td>
-              </tr>
-              <tr style="border-bottom:1px solid #f1f5f9;">
-                <td style="padding:12px; font-size:13px; text-align:center; color:#0f172a;">5</td>
-                <td style="padding:12px; font-size:13px; font-weight:600; color:#0f172a; display:flex; align-items:center; gap:8px;"><span class="material-symbols-outlined" style="color:#22c55e; font-size:18px;">description</span> समरी रिपोर्ट</td>
-                <td style="padding:12px; font-size:13px; color:#64748b;">समरी</td><td style="padding:12px; font-size:13px; color:#64748b;">${currentMonthYear}</td><td style="padding:12px; font-size:13px; text-align:center; color:#64748b;">1</td><td style="padding:12px; font-size:13px; font-weight:600; color:#16a34a; text-align:right;">${fmt(t.income)}</td>
-              </tr>
-            </tbody>
-          </table>
+      <!-- Section 2: Report Files -->
+      <h2 style="font-size:16px; color:#1e293b; font-weight:700; margin-bottom:12px;">रिपोर्ट फाइल्स</h2>
+      <div style="display:flex; gap:12px; overflow-x:auto; padding-bottom:12px; margin-bottom:12px; scrollbar-width:none;">
+        <div style="min-width:140px; background:white; padding:16px; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 2px 10px rgba(0,0,0,0.02); display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;"><span class="material-symbols-outlined" style="font-size:32px; color:#3b82f6;">folder</span><span class="material-symbols-outlined" style="font-size:16px; color:#94a3b8;">more_vert</span></div>
+          <div style="font-size:14px; font-weight:700; color:#0f172a; margin-top:8px;">Monthly</div>
+          <div style="font-size:11px; color:#64748b;">कुल फाइल्स<br><span style="font-size:14px; font-weight:700; color:#0f172a;">${DB.mashikJama.length}</span></div>
+          <button data-reptab="mashikJama" style="margin-top:8px; width:100%; padding:8px; border-radius:8px; border:none; background:#e0f2fe; color:#0284c7; font-size:12px; font-weight:700; cursor:pointer;">खोलें</button>
         </div>
-        <div style="padding:12px; display:flex; justify-content:center; align-items:center; gap:12px; border-top:1px solid #f1f5f9;">
-          <button style="width:32px; height:32px; border-radius:8px; border:1px solid #e2e8f0; background:white; color:#64748b; display:flex; align-items:center; justify-content:center;"><span class="material-symbols-outlined" style="font-size:16px;">chevron_left</span></button>
-          <button style="width:32px; height:32px; border-radius:8px; border:none; background:#311b92; color:white; font-size:14px; font-weight:700;">1</button>
-          <button style="width:32px; height:32px; border-radius:8px; border:1px solid #e2e8f0; background:white; color:#64748b; display:flex; align-items:center; justify-content:center;"><span class="material-symbols-outlined" style="font-size:16px;">chevron_right</span></button>
+        <div style="min-width:140px; background:white; padding:16px; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 2px 10px rgba(0,0,0,0.02); display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;"><span class="material-symbols-outlined" style="font-size:32px; color:#f97316;">folder</span><span class="material-symbols-outlined" style="font-size:16px; color:#94a3b8;">more_vert</span></div>
+          <div style="font-size:14px; font-weight:700; color:#0f172a; margin-top:8px;">Chanda</div>
+          <div style="font-size:11px; color:#64748b;">कुल फाइल्स<br><span style="font-size:14px; font-weight:700; color:#0f172a;">${DB.sahyog.length}</span></div>
+          <button data-reptab="sahyog" style="margin-top:8px; width:100%; padding:8px; border-radius:8px; border:none; background:#ffedd5; color:#ea580c; font-size:12px; font-weight:700; cursor:pointer;">खोलें</button>
+        </div>
+        <div style="min-width:140px; background:white; padding:16px; border-radius:16px; border:1px solid #f1f5f9; box-shadow:0 2px 10px rgba(0,0,0,0.02); display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;"><span class="material-symbols-outlined" style="font-size:32px; color:#8b5cf6;">folder</span><span class="material-symbols-outlined" style="font-size:16px; color:#94a3b8;">more_vert</span></div>
+          <div style="font-size:14px; font-weight:700; color:#0f172a; margin-top:8px;">Kharcha</div>
+          <div style="font-size:11px; color:#64748b;">कुल फाइल्स<br><span style="font-size:14px; font-weight:700; color:#0f172a;">${DB.expense.length}</span></div>
+          <button data-reptab="expense" style="margin-top:8px; width:100%; padding:8px; border-radius:8px; border:none; background:#f3e8ff; color:#9333ea; font-size:12px; font-weight:700; cursor:pointer;">खोलें</button>
         </div>
       </div>`;
   } else {
