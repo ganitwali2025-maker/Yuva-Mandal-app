@@ -1269,17 +1269,17 @@ function udharChandaPage(){
     <button class="btn-primary" id="saveUdharBtn">दर्ज करें</button>
 
     <div class="section-title" style="margin-top:24px;"><h2>हाल की एंट्री</h2></div>
-    ${list.length===0 ? \`<div class="empty">कोई एंट्री नहीं</div>\` :
-      \`<div class="card-list">${\\[...list\\].reverse().slice(0,15).map(r=>\`
+    ${list.length===0 ? `<div class="empty">कोई एंट्री नहीं</div>` :
+      `<div class="card-list">${[...list].reverse().slice(0,15).map(r=>`
         <div class="row-card">
-          <div class="avatar">\${initials(r.Name)}</div>
-          <div class="row-main"><div class="t1">\${r.Name}</div><div class="t2">\${r.Date} · <span style="color:\${r['Paid Status']==='Paid'?'var(--green)':'var(--red)'}">\${r['Paid Status']}</span></div></div>
-          <div class="row-amt \${r['Paid Status']==='Paid'?'in':'out'}">\${fmt(r.Amount)}</div>
-        </div>\`).join('')}</div>\`
+          <div class="avatar">${initials(r.Name)}</div>
+          <div class="row-main"><div class="t1">${r.Name}</div><div class="t2">${r.Date} · <span style="color:${r['Paid Status']==='Paid'?'var(--green)':'var(--red)'}">${r['Paid Status']}</span></div></div>
+          <div class="row-amt ${r['Paid Status']==='Paid'?'in':'out'}">${fmt(r.Amount)}</div>
+        </div>`).join('')}</div>`
     }
   </div>
   ${navBar('home')}
-  \`;
+  `;
 }
 
 /* ======================= REPORTS ======================= */
