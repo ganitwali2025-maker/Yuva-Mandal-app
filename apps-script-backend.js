@@ -5,7 +5,8 @@ const SHEET_NAMES = {
   members: 'Members',
   mashikJama: 'Mashik Jama',
   sahyog: 'Sahyog',
-  expense: 'Expense'
+  expense: 'Expense',
+  udharChanda: 'Udhar Chanda'
 };
 
 function doGet(e) {
@@ -48,7 +49,8 @@ function getAllData() {
     members: getSheetData(ss, SHEET_NAMES.members),
     mashikJama: getSheetData(ss, SHEET_NAMES.mashikJama),
     sahyog: getSheetData(ss, SHEET_NAMES.sahyog),
-    expense: getSheetData(ss, SHEET_NAMES.expense)
+    expense: getSheetData(ss, SHEET_NAMES.expense),
+    udharChanda: getSheetData(ss, SHEET_NAMES.udharChanda)
   };
   return result;
 }
@@ -136,6 +138,11 @@ function initializeSheets() {
   // Create Expense sheet
   createSheetIfNotExists(ss, SHEET_NAMES.expense, [
     ['ID', 'Date', 'Category', 'Description', 'Amount', 'PaidTo']
+  ]);
+
+  // Create Udhar Chanda sheet
+  createSheetIfNotExists(ss, SHEET_NAMES.udharChanda, [
+    ['ID', 'Date', 'Name', 'Amount', 'Paid Status', 'Paid Date', 'Remark']
   ]);
 
   Logger.log('Sheets initialized successfully');

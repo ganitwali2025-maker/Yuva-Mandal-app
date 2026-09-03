@@ -16,6 +16,7 @@ export async function syncAll(scriptUrl) {
         mashikJama: data.mashikJama || [],
         sahyog: data.sahyog || [],
         expense: data.expense || [],
+        udharChanda: data.udharChanda || [],
       };
       saveCache(db);
       return { connState: 'online', db };
@@ -31,7 +32,7 @@ export async function pushRow(scriptUrl, type, data) {
   if (!scriptUrl) {
     // Offline fallback
     const db = getLocalDB();
-    const key = { member: 'members', mashikJama: 'mashikJama', sahyog: 'sahyog', expense: 'expense' }[type];
+    const key = { member: 'members', mashikJama: 'mashikJama', sahyog: 'sahyog', expense: 'expense', udharChanda: 'udharChanda' }[type];
     const id = (db[key].reduce((m, r) => Math.max(m, Number(r.ID) || 0), 0)) + 1;
     db[key].push({ ID: id, ...data });
     saveCache(db);
@@ -68,6 +69,7 @@ export function getLocalDB() {
     mashikJama: [],
     sahyog: [],
     expense: [],
+    udharChanda: [],
   };
 }
 

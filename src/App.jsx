@@ -12,6 +12,7 @@ import Sahyog from './pages/Sahyog';
 import Expense from './pages/Expense';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import UdharChanda from './pages/UdharChanda';
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/mashik-jama" element={<MashikJama />} />
           <Route path="/sahyog" element={<Sahyog />} />
           <Route path="/expense" element={<Expense />} />
+          <Route path="/udhar-chanda" element={<UdharChanda />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>

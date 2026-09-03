@@ -42,6 +42,7 @@ export function getRecentActivities(db, limit = 5) {
     ...db.mashikJama.map((r) => ({ ...r, _type: 'mashikJama', _date: r.Date || r['दिनांक'] })),
     ...db.sahyog.map((r) => ({ ...r, _type: 'sahyog', _date: r.Date })),
     ...db.expense.map((r) => ({ ...r, _type: 'expense', _date: r.Date })),
+    ...db.udharChanda.map((r) => ({ ...r, _type: 'udharChanda', _date: r.Date })),
   ].sort((a, b) => new Date(b._date) - new Date(a._date)).slice(0, limit);
   return recent;
 }

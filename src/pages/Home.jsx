@@ -46,6 +46,7 @@ export default function Home() {
           <ServiceIcon page="mashik-jama" icon="₹" color="#16A870" label="मासिक जमा" />
           <ServiceIcon page="sahyog" icon="🤝" color="#8B7CF6" label="सहयोग/दान" />
           <ServiceIcon page="expense" icon="－" color="#E24C4B" label="खर्च दर्ज" />
+          <ServiceIcon page="udhar-chanda" icon="📒" color="#FF9800" label="उधार चंदा" />
           <ServiceIcon page="reports" icon="▤" color="#0EA5A5" label="रिपोर्ट शीट" />
           <ServiceIcon page="idcard-self" icon="🪪" color="#151966" label="मेरा कार्ड" />
 
