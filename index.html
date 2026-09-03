@@ -522,9 +522,9 @@ let settings = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
 if (!settings.mandalName || settings.mandalName === 'Yuva Vikas Mandal') settings.mandalName = 'YUVA MITRA MANDAL';
 if (!settings.village || settings.village === 'आपका गाँव / शहर') settings.village = 'श्री बजरंग युवा गणेश उत्सव समिति';
 settings.scriptUrl = settings.scriptUrl || '';
-settings.monthlyChandaAmt = settings.monthlyChandaAmt || 100;
+settings.monthlyMashikJamaAmt = settings.monthlyMashikJamaAmt || 100;
 
-let DB = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null') || { members: [], chanda: [], sahyog: [], expense: [] };
+let DB = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null') || { members: [], mashikJama: [], sahyog: [], expense: [] };
 
 let route = { page: 'home' };
 let connState = settings.scriptUrl ? 'connecting' : 'offline';
@@ -552,12 +552,12 @@ function saveCache(){ localStorage.setItem(CACHE_KEY, JSON.stringify(DB)); }
 function saveSettings(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(settings)); }
 
 function totals(){
-  const income = DB.chanda.reduce((s,r)=>s+Number(r.Amount||0),0) + DB.sahyog.reduce((s,r)=>s+Number(r.Amount||0),0);
+  const income = DB.mashikJama.reduce((s,r)=>s+Number(r.Amount||r['राशि (₹)']||0),0) + DB.sahyog.reduce((s,r)=>s+Number(r.Amount||0),0);
   const expense = DB.expense.reduce((s,r)=>s+Number(r.Amount||0),0);
   const balance = income - expense;
-  const chandaTotal = DB.chanda.reduce((s,r)=>s+Number(r.Amount||0),0);
+  const mashikJamaTotal = DB.mashikJama.reduce((s,r)=>s+Number(r.Amount||r['राशि (₹)']||0),0);
   const sahyogTotal = DB.sahyog.reduce((s,r)=>s+Number(r.Amount||0),0);
-  return {income, expense, balance, chandaTotal, sahyogTotal};
+  return {income, expense, balance, mashikJamaTotal, sahyogTotal};
 }
 
 /* ======================= BACKEND SYNC ======================= */
@@ -568,7 +568,7 @@ async function syncAll(){
     const res = await fetch(settings.scriptUrl + '?action=all&t=' + Date.now());
     const data = await res.json();
     if(data.ok){
-      DB = { members:data.members||[], chanda:data.chanda||[], sahyog:data.sahyog||[], expense:data.expense||[] };
+      DB = { members:data.members||[], mashikJama:data.mashikJama||[], sahyog:data.sahyog||[], expense:data.expense||[] };
       saveCache();
       connState = 'online';
     } else {
@@ -583,7 +583,7 @@ async function syncAll(){
 async function pushRow(type, data){
   if(!settings.scriptUrl){
     // offline fallback: keep locally only
-    const key = {member:'members',chanda:'chanda',sahyog:'sahyog',expense:'expense'}[type];
+    const key = {member:'members',mashikJama:'mashikJama',sahyog:'sahyog',expense:'expense'}[type];
     const id = (DB[key].reduce((m,r)=>Math.max(m,Number(r.ID)||0),0)) + 1;
     DB[key].push(Object.assign({ID:id}, data));
     saveCache();
@@ -614,7 +614,7 @@ function navBar(active){
   const items = [
     {k:'home', ic:'home', label:'होम'},
     {k:'members', ic:'group', label:'सदस्य'},
-    {k:'chanda', ic:'currency_rupee', label:'लेन-देन'},
+    {k:'mashikJama', ic:'currency_rupee', label:'लेन-देन'},
     {k:'reports', ic:'bar_chart', label:'रिपोर्ट'},
     {k:'settings', ic:'settings', label:'सेटिंग'},
   ];
@@ -630,7 +630,7 @@ function pageTemplate(){
     case 'home': return homePage();
     case 'members': return membersPage();
     case 'idcard': return idCardPage(route.id);
-    case 'chanda': return chandaPage();
+    case 'mashikJama': return chandaPage();
     case 'sahyog': return sahyogPage();
     case 'expense': return expensePage();
     case 'reports': return reportsPage();
@@ -644,7 +644,7 @@ function pageTemplate(){
 function homePage(){
   const t = totals();
   const recent = [
-    ...DB.chanda.map(r=>({...r, _type:'chanda', _date:r.Date})),
+    ...DB.mashikJama.map(r=>({...r, _type:'mashikJama', _date:r.Date || r['दिनांक']})),
     ...DB.sahyog.map(r=>({...r, _type:'sahyog', _date:r.Date})),
     ...DB.expense.map(r=>({...r, _type:'expense', _date:r.Date})),
   ].sort((a,b)=> new Date(b._date) - new Date(a._date)).slice(0,5);
@@ -703,7 +703,7 @@ function homePage(){
     <div class="services-grid">
       ${serviceIcon('members','groups','orange','सदस्य सूची')}
       ${serviceIcon('addMember','person_add','purple','नया सदस्य')}
-      ${serviceIcon('chanda','account_balance_wallet','green','मासिक जमा')}
+      ${serviceIcon('mashikJama','account_balance_wallet','green','मासिक जमा')}
       ${serviceIcon('sahyog','volunteer_activism','blue','चंदा/योगदान')}
       ${serviceIcon('expense','receipt_long','red','खर्च दर्ज')}
       ${serviceIcon('reports','description','teal','रिपोर्ट देखें')}
@@ -734,16 +734,16 @@ function serviceIcon(page, ic, colorClass, label){
 
 function activityRow(r){
   const isIncome = r._type !== 'expense';
-  const title = r._type==='chanda' ? (r.MemberName || 'सदस्य') + ' — मासिक चंदा'
+  const title = r._type==='mashikJama' ? (r['सदस्य का नाम'] || 'सदस्य') + ' — मासिक जमा'
               : r._type==='sahyog' ? (r.DonorName || 'सहयोग') + ' — सहयोग'
               : (r.Category || 'खर्च');
-  const sub = r._type==='chanda' ? `${r.Month||''} ${r.Year||''} · ${fdate(r._date)}`
+  const sub = r._type==='mashikJama' ? `${r['माह']||''} · ${fdate(r._date)}`
             : r._type==='sahyog' ? `${r.Purpose||''} · ${fdate(r._date)}`
             : `${r.Description||''} · ${fdate(r._date)}`;
   return `<div class="row-card">
     <div class="avatar" style="background:${isIncome?'var(--green-bg)':'var(--red-bg)'};color:${isIncome?'var(--green)':'var(--red)'}">${isIncome?'↑':'↓'}</div>
     <div class="row-main"><div class="t1">${title}</div><div class="t2">${sub}</div></div>
-    <div class="row-amt ${isIncome?'in':'out'}">${isIncome?'+':'-'}${fmt(r.Amount)}</div>
+    <div class="row-amt ${isIncome?'in':'out'}">${isIncome?'+':'-'}${fmt(r.Amount || r['राशि (₹)'])}</div>
   </div>`;
 }
 
@@ -1189,8 +1189,8 @@ function reportsPage(){
       <div class="settings-box">
         <h3>वित्तीय सारांश (Financial Summary)</h3>
         <table class="rep" style="margin-top:8px;">
-          <tr><td>कुल आय (चंदा + सहयोग)</td><td style="text-align:right;color:var(--green);font-weight:700;">${fmt(t.income)}</td></tr>
-          <tr><td>— मासिक चंदा</td><td style="text-align:right;">${fmt(t.chandaTotal)}</td></tr>
+          <tr><td>कुल आय (जमा + सहयोग)</td><td style="text-align:right;color:var(--green);font-weight:700;">${fmt(t.income)}</td></tr>
+          <tr><td>— मासिक जमा</td><td style="text-align:right;">${fmt(t.mashikJamaTotal)}</td></tr>
           <tr><td>— सहयोग / दान</td><td style="text-align:right;">${fmt(t.sahyogTotal)}</td></tr>
           <tr><td>कुल खर्च</td><td style="text-align:right;color:var(--red);font-weight:700;">${fmt(t.expense)}</td></tr>
           <tr><td><b>कुल बैलेंस</b></td><td style="text-align:right;"><b>${fmt(t.balance)}</b></td></tr>
@@ -1199,7 +1199,7 @@ function reportsPage(){
       </div>`;
   } else {
     const map = {members:['ID','Name','Mobile','Village','JoinDate','Status'],
-                 chanda:['ID','MemberName','Month','Year','Amount','Date','Mode'],
+                 mashikJama:['ID','दिनांक','माह','सदस्य का नाम','फोन नंबर','पद','राशि (₹)','भुगतान माध्यम','एंट्री दिनांक','एंट्री समय'],
                  sahyog:['ID','DonorName','Purpose','Amount','Date'],
                  expense:['ID','Date','Category','Description','Amount','PaidTo']};
     const cols = map[tab];
@@ -1207,7 +1207,7 @@ function reportsPage(){
     body = `<div class="rep-wrap"><table class="rep">
       <tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr>
       ${rows.length===0 ? `<tr><td colspan="${cols.length}" style="text-align:center;color:var(--muted);padding:20px;">कोई डेटा नहीं</td></tr>` :
-        rows.map(r=>`<tr>${cols.map(c=>`<td>${c==='Amount'?fmt(r[c]):(r[c]||'-')}</td>`).join('')}</tr>`).join('')
+        rows.map(r=>`<tr>${cols.map(c=>`<td>${c==='Amount'||c==='राशि (₹)'?fmt(r[c]):(r[c]||'-')}</td>`).join('')}</tr>`).join('')
       }
     </table></div>`;
   }
@@ -1217,8 +1217,8 @@ function reportsPage(){
     <div><h1>रिपोर्ट शीट</h1><p>Google Sheet का लाइव डेटा</p></div>
   </div>
   <div class="tabbar">
-    ${['summary','members','chanda','sahyog','expense'].map(k=>`<div class="tab ${tab===k?'active':''}" data-reptab="${k}">${
-      {summary:'सारांश',members:'सदस्य',chanda:'चंदा',sahyog:'सहयोग',expense:'खर्च'}[k]
+    ${['summary','members','mashikJama','sahyog','expense'].map(k=>`<div class="tab ${tab===k?'active':''}" data-reptab="${k}">${
+      {summary:'सारांश',members:'सदस्य',mashikJama:'मासिक जमा',sahyog:'सहयोग',expense:'खर्च'}[k]
     }</div>`).join('')}
   </div>
   <div style="padding-top:10px;">${tab==='summary' ? `<div style="padding:0 18px;">${body}</div>` : body}</div>
@@ -1248,8 +1248,8 @@ function settingsPage(){
     <div class="field" style="margin-bottom:0;"><input id="set_village" value="${settings.village}"></div>
   </div>
   <div class="settings-box">
-    <h3>मासिक चंदा (डिफ़ॉल्ट राशि)</h3>
-    <div class="field" style="margin-bottom:0;"><input id="set_chanda" type="number" value="${settings.monthlyChandaAmt}"></div>
+    <h3>मासिक जमा (डिफ़ॉल्ट राशि)</h3>
+    <div class="field" style="margin-bottom:0;"><input id="set_mashikJama" type="number" value="${settings.monthlyMashikJamaAmt}"></div>
   </div>
   <div class="settings-box">
     <h3>Google Apps Script Web App URL</h3>
@@ -1346,22 +1346,37 @@ function bindEvents(){
   }
 
 
-  const saveChandaBtn = document.getElementById('saveChandaBtn');
-  if(saveChandaBtn){
-    saveChandaBtn.addEventListener('click', async ()=>{
+  // UPI Tabs
+  const payModes = document.querySelectorAll('.pay-mode-btn');
+  if(payModes.length > 0){
+    payModes.forEach(btn => {
+      btn.addEventListener('click', () => {
+        payModes.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('c_mode').value = btn.getAttribute('data-mode');
+      });
+    });
+  }
+
+  const saveMashikJamaBtn = document.getElementById('saveChandaBtn');
+  if(saveMashikJamaBtn){
+    saveMashikJamaBtn.addEventListener('click', async ()=>{
       const mid = document.getElementById('c_member').value;
       if(!mid){ toast('सदस्य चुनें'); return; }
       const member = DB.members.find(m=>String(m.ID)===String(mid));
-      saveChandaBtn.disabled = true; saveChandaBtn.textContent = 'सेव हो रहा है...';
-      await pushRow('chanda', {
-        MemberID: mid, MemberName: member?member.Name:'',
-        Month: document.getElementById('c_month').value,
-        Year: document.getElementById('c_year').value,
-        Amount: document.getElementById('c_amount').value,
-        Date: document.getElementById('c_date').value,
-        Mode: document.getElementById('c_mode').value,
+      saveMashikJamaBtn.disabled = true; saveMashikJamaBtn.textContent = 'सेव हो रहा है...';
+      await pushRow('mashikJama', {
+        'सदस्य का नाम': member?member.Name:'',
+        'फोन नंबर': member?member.Mobile:'',
+        'पद': member?member.Pad:'',
+        'माह': document.getElementById('c_month').value,
+        'राशि (₹)': document.getElementById('c_amount').value,
+        'दिनांक': document.getElementById('c_date').value,
+        'भुगतान माध्यम': document.getElementById('c_mode').value,
+        'एंट्री दिनांक': new Date().toLocaleDateString('en-GB'),
+        'एंट्री समय': new Date().toLocaleTimeString('en-US', { hour12: true })
       });
-      toast('चंदा दर्ज हो गया ✅');
+      toast('जमा दर्ज हो गया ✅');
       render();
     });
   }
@@ -1407,7 +1422,7 @@ function bindEvents(){
     saveSettingsBtn.addEventListener('click', ()=>{
       settings.mandalName = document.getElementById('set_name').value.trim() || settings.mandalName;
       settings.village = document.getElementById('set_village').value.trim() || settings.village;
-      settings.monthlyChandaAmt = Number(document.getElementById('set_chanda').value) || settings.monthlyChandaAmt;
+      settings.monthlyMashikJamaAmt = Number(document.getElementById('set_mashikJama').value) || settings.monthlyMashikJamaAmt;
       settings.scriptUrl = document.getElementById('set_url').value.trim();
       saveSettings();
       toast('सेटिंग सेव हो गई ✅');
