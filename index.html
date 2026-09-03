@@ -1165,53 +1165,117 @@ function transactionsPage(){
   `;
 }
 
+window.updatePayModeUI = function(radio){
+  document.querySelectorAll('.pay-mode-btn').forEach(l => l.classList.remove('active'));
+  radio.parentElement.classList.add('active');
+  document.getElementById('s_mode').value = radio.value;
+};
+
 /* ======================= SAHYOG ======================= */
 function sahyogPage(){
   const t = totals();
-  const list = DB.sahyog || [];
   return `
-  <div class="page-head" style="background: #311b92; color: white; padding: 24px 20px 40px; border-radius: 0 0 20px 20px;">
+  <div class="page-head" style="background: #311b92; color: white; padding: 24px 20px 60px; border-radius: 0 0 24px 24px;">
     <div style="display:flex; justify-content:space-between; align-items:center;">
       <div style="display:flex; align-items:center; gap: 12px;">
-        <button class="back-btn" data-nav="home" style="background: rgba(255,255,255,0.15); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;"><span class="material-symbols-outlined" style="font-size:20px;">arrow_back</span></button>
-        <div><h1 style="color:white; font-size:18px; margin:0;">चंदा / सहयोग</h1><p style="color:rgba(255,255,255,0.8); font-size:12px; margin:0;">Chanda & Donations</p></div>
+        <button class="back-btn" data-nav="home" style="background: rgba(255,255,255,0.15); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;"><span class="material-symbols-outlined" style="font-size:20px;">arrow_back</span></button>
+        <div><h1 style="color:white; font-size:18px; margin:0; font-weight:700;">चंदा / सहयोग</h1><p style="color:rgba(255,255,255,0.8); font-size:13px; margin:0;">Chanda & Donations</p></div>
       </div>
-      <span class="material-symbols-outlined" style="color:white;">volunteer_activism</span>
+      <span class="material-symbols-outlined" style="color:white; font-size:28px;">volunteer_activism</span>
     </div>
   </div>
-  <div class="content" style="padding-top:14px; margin-top:-20px;">
-    <div style="display:flex; gap:10px; margin-bottom:16px;">
-      <div class="settings-box" style="flex:1; margin:0; text-align:center;">
-        <h3 style="font-size:13px;">कुल चंदा/सहयोग राशि</h3>
-        <p style="margin:0;color:var(--green);font-family:Poppins;font-weight:800;font-size:20px;">${fmt(t.sahyogTotal)}</p>
+  <div class="content" style="padding: 0 20px 20px; margin-top:-30px; display:flex; flex-direction:column; gap:20px;">
+    
+    <div style="background:white; border-radius:16px; padding:20px; box-shadow:0 8px 24px rgba(0,0,0,0.06); display:flex; align-items:center; justify-content:space-between;">
+      <div style="width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg, #6366f1, #311b92); display:flex; align-items:center; justify-content:center; color:white; box-shadow:0 4px 12px rgba(49,27,146,0.3);">
+        <span class="material-symbols-outlined" style="font-size:24px;">account_balance_wallet</span>
+      </div>
+      <div style="text-align:right;">
+        <h3 style="font-size:13px; color:#311b92; margin:0 0 4px; font-weight:700;">कुल चंदा/सहयोग राशि</h3>
+        <p style="margin:0; color:#10b981; font-weight:800; font-size:26px; line-height:1;">${fmt(t.sahyogTotal)}</p>
       </div>
     </div>
     
-    <div class="field"><label>तारीख</label><input id="s_date" type="date" value="${todayStr()}"></div>
-    <div class="field"><label>नाम</label><input id="s_donor" placeholder="नाम लिखें"></div>
-    <div class="field"><label>राशि (₹)</label><input id="s_amount" type="number" placeholder="0"></div>
-    <div class="field"><label>उद्देश्य / विवरण</label><input id="s_purpose" placeholder="जैसे: होली कार्यक्रम, त्यौहार आदि"></div>
-    <div class="field"><label>भुगतान माध्यम</label>
-      <select id="s_mode">
-        <option value="Cash">Cash (नकद)</option>
-        <option value="UPI">UPI (ऑनलाइन)</option>
-        <option value="Credit">Credit (उधार)</option>
-      </select>
+    <div style="background:white; border-radius:16px; padding:20px; box-shadow:0 4px 16px rgba(0,0,0,0.03);">
+      
+      <div class="custom-field">
+        <label>तारीख</label>
+        <div class="input-wrap">
+          <span class="material-symbols-outlined ic">calendar_today</span>
+          <input id="s_date" type="date" value="${todayStr()}">
+        </div>
+      </div>
+
+      <div class="custom-field">
+        <label>नाम</label>
+        <div class="input-wrap">
+          <span class="material-symbols-outlined ic">person</span>
+          <input id="s_donor" placeholder="नाम लिखें">
+        </div>
+      </div>
+
+      <div class="custom-field">
+        <label>राशि (₹)</label>
+        <div class="input-wrap">
+          <span class="material-symbols-outlined ic">currency_rupee</span>
+          <input id="s_amount" type="number" placeholder="0">
+        </div>
+      </div>
+
+      <div class="custom-field">
+        <label>उद्देश्य / विवरण</label>
+        <div class="input-wrap">
+          <span class="material-symbols-outlined ic">receipt_long</span>
+          <input id="s_purpose" placeholder="जैसे: होली कार्यक्रम, त्यौहार आदि">
+        </div>
+      </div>
+
+      <div class="custom-field" style="margin-bottom:0;">
+        <label>भुगतान माध्यम</label>
+        <div class="payment-modes" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-top:12px;">
+          
+          <label class="pay-mode-btn active" style="position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:12px 4px; border:1.5px solid #e2e8f0; border-radius:12px; cursor:pointer; transition:all 0.2s; text-align:center;">
+            <input type="radio" name="s_mode_radio" value="Cash" checked style="display:none;" onchange="window.updatePayModeUI(this)">
+            <span class="material-symbols-outlined c-icon" style="color:#311b92; font-size:24px;">payments</span>
+            <span style="font-size:13px; font-weight:700; color:#0f172a; line-height:1.2;">Cash<br><span style="font-size:11px; color:#64748b; font-weight:600;">(नकद)</span></span>
+            <div class="check-badge" style="display:flex; position:absolute; top:-8px; right:-8px; background:#311b92; color:white; width:20px; height:20px; border-radius:50%; align-items:center; justify-content:center; box-shadow:0 2px 4px rgba(0,0,0,0.1);"><span class="material-symbols-outlined" style="font-size:14px; font-weight:bold;">check</span></div>
+          </label>
+
+          <label class="pay-mode-btn" style="position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:12px 4px; border:1.5px solid #e2e8f0; border-radius:12px; cursor:pointer; transition:all 0.2s; text-align:center;">
+            <input type="radio" name="s_mode_radio" value="UPI" style="display:none;" onchange="window.updatePayModeUI(this)">
+            <span class="c-icon" style="font-size:18px; font-weight:800; font-style:italic; color:#64748b; height:24px; display:flex; align-items:center;">UPI</span>
+            <span style="font-size:13px; font-weight:700; color:#0f172a; line-height:1.2;">&nbsp;<br><span style="font-size:11px; color:#64748b; font-weight:600;">(ऑनलाइन)</span></span>
+            <div class="check-badge" style="display:none; position:absolute; top:-8px; right:-8px; background:#311b92; color:white; width:20px; height:20px; border-radius:50%; align-items:center; justify-content:center; box-shadow:0 2px 4px rgba(0,0,0,0.1);"><span class="material-symbols-outlined" style="font-size:14px; font-weight:bold;">check</span></div>
+          </label>
+
+          <label class="pay-mode-btn" style="position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:12px 4px; border:1.5px solid #e2e8f0; border-radius:12px; cursor:pointer; transition:all 0.2s; text-align:center;">
+            <input type="radio" name="s_mode_radio" value="Credit" style="display:none;" onchange="window.updatePayModeUI(this)">
+            <span class="material-symbols-outlined c-icon" style="color:#64748b; font-size:24px;">credit_card</span>
+            <span style="font-size:13px; font-weight:700; color:#0f172a; line-height:1.2;">Credit<br><span style="font-size:11px; color:#64748b; font-weight:600;">(उधार)</span></span>
+            <div class="check-badge" style="display:none; position:absolute; top:-8px; right:-8px; background:#311b92; color:white; width:20px; height:20px; border-radius:50%; align-items:center; justify-content:center; box-shadow:0 2px 4px rgba(0,0,0,0.1);"><span class="material-symbols-outlined" style="font-size:14px; font-weight:bold;">check</span></div>
+          </label>
+        </div>
+      </div>
+      <select id="s_mode" style="display:none;"><option value="Cash">Cash</option><option value="UPI">UPI</option><option value="Credit">Credit</option></select>
     </div>
 
-    <button class="btn-primary" id="saveSahyogBtn" style="background:#311b92; border-radius:12px; height:48px; font-weight:700;">दर्ज करें</button>
-
-    <div class="section-title" style="margin-top:24px;"><h2>हाल की एंट्री</h2></div>
-    ${list.length===0 ? `<div class="empty">कोई एंट्री नहीं</div>` :
-      `<div class="card-list">${[...list].reverse().slice(0,15).map(r=>`
-        <div class="row-card">
-          <div class="avatar">${initials(r.DonorName)}</div>
-          <div class="row-main"><div class="t1">${r.DonorName}</div><div class="t2">${r.Purpose||''} · ${fdate(r.Date)}</div></div>
-          <div class="row-amt in">+${fmt(r.Amount)}</div>
-        </div>`).join('')}</div>`
-    }
+    <button class="btn-primary" id="saveSahyogBtn" style="background:#311b92; border-radius:12px; height:52px; font-weight:700; font-size:16px; display:flex; align-items:center; justify-content:center; gap:8px;">
+      <span class="material-symbols-outlined" style="font-size:20px;">send</span> दर्ज करें
+    </button>
   </div>
-  ${navBar('home')}
+
+  <style>
+    .custom-field { margin-bottom: 20px; }
+    .custom-field label { display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 8px; }
+    .custom-field .input-wrap { position: relative; display: flex; align-items: center; }
+    .custom-field .input-wrap .ic { position: absolute; left: 14px; color: #311b92; font-size: 20px; pointer-events: none; }
+    .custom-field .input-wrap input { width: 100%; padding: 14px 14px 14px 44px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 15px; font-family: 'Nunito', sans-serif; transition: border-color 0.2s; box-sizing: border-box; background: white; color: #0f172a; }
+    .custom-field .input-wrap input:focus { border-color: #311b92; outline: none; }
+    
+    .pay-mode-btn.active { border-color: #311b92 !important; background: #f5f3ff; }
+    .pay-mode-btn.active .check-badge { display: flex !important; }
+    .pay-mode-btn.active .c-icon { color: #311b92 !important; }
+  </style>
   `;
 }
 
