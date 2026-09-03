@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { getLocalDB, getSettings, saveSettings, saveCache, syncAll, initializeDefaults } from '../api/backend';
+import { translations } from '../utils/translations';
 
 export const AppContext = createContext();
 
@@ -8,6 +9,14 @@ export function AppProvider({ children }) {
   const [settings, setSettings] = useState(() => initializeDefaults());
   const [connState, setConnState] = useState(settings.scriptUrl ? 'connecting' : 'offline');
   const [toast, setToast] = useState('');
+  const [language, setLanguage] = useState(() => localStorage.getItem('ym_lang') || 'hi');
+
+  const switchLanguage = (lang) => {
+    setLanguage(lang);
+    localStorage.setItem('ym_lang', lang);
+  };
+
+  const t = (key) => translations[language]?.[key] || key;
 
   // Initial sync on mount
   useEffect(() => {
@@ -56,6 +65,9 @@ export function AppProvider({ children }) {
     addRow,
     showToast,
     performSync,
+    language,
+    switchLanguage,
+    t,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

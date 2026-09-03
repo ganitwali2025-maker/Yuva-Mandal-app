@@ -1,14 +1,16 @@
 import { useNavigate } from 'react-router-dom';
+import { useApp } from '../../context/AppContext';
 
 export default function BottomNav({ active }) {
   const navigate = useNavigate();
+  const { t } = useApp();
 
   const items = [
-    { k: 'home', ic: '⌂', label: 'होम' },
-    { k: 'members', ic: '☺', label: 'सदस्य' },
-    { k: 'mashik-jama', ic: '₹', label: 'जमा' },
-    { k: 'reports', ic: '▤', label: 'रिपोर्ट' },
-    { k: 'settings', ic: '⚙', label: 'सेटिंग' },
+    { k: 'home', ic: '⌂', label: t('home') },
+    { k: 'members', ic: '☺', label: t('members') },
+    { k: 'mashik-jama', ic: '₹', label: t('mashikJama').split(' ')[0] },
+    { k: 'reports', ic: '▤', label: t('reports') },
+    { k: 'settings', ic: '⚙', label: t('settings') },
   ];
 
   return (

@@ -70,7 +70,7 @@ function getSheetData(ss, sheetName) {
         obj[header] = row[index] || '';
       });
       return obj;
-    }).filter(row => row.ID); // Filter out empty rows
+    }).filter(row => row.ID || row.SN); // Filter out empty rows
   } catch (err) {
     Logger.log(`Error reading ${sheetName}: ${err}`);
     return [];
@@ -96,7 +96,7 @@ function addRow(type, data) {
 
     // Build new row based on headers
     const newRow = headerRow.map(header => {
-      if (header === 'ID') {
+      if (header === 'ID' || header === 'SN') {
         // Auto-generate ID
         const lastRow = sheet.getLastRow();
         if (lastRow === 1) return 1;
@@ -130,7 +130,7 @@ function initializeSheets() {
 
   // Create Sahyog sheet
   createSheetIfNotExists(ss, SHEET_NAMES.sahyog, [
-    ['ID', 'DonorName', 'Purpose', 'Amount', 'Date']
+    ['SN', 'Date', 'Name', 'Amount', 'Paid Status', 'Remark', 'Paid Date']
   ]);
 
   // Create Expense sheet

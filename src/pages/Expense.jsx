@@ -7,7 +7,7 @@ import Input from '../components/ui/Input';
 import Select from '../components/ui/Select';
 import Button from '../components/ui/Button';
 
-export default function Expense() {
+export default function खर्च() {
   const { db, addRow, showToast } = useApp();
   const totals = calculateTotals(db);
   const [loading, setLoading] = useState(false);
@@ -41,7 +41,7 @@ export default function Expense() {
 
   return (
     <div className="app">
-      <PageHeader title="खर्च दर्ज करें" subtitle="Expense Entry" backTo="/" />
+      <PageHeader title="खर्च दर्ज करें" subtitle="खर्च Entry" backTo="/" />
 
       <div className="content" style={{ paddingTop: '14px' }}>
         <div className="settings-box" style={{ margin: '0 0 16px' }}>

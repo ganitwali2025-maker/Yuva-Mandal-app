@@ -26,10 +26,12 @@ export default function Sahyog() {
 
     setLoading(true);
     await addRow('sahyog', {
-      DonorName: form.donor.trim(),
-      Purpose: form.purpose.trim(),
+      Name: form.donor.trim(),
       Amount: form.amount,
+      'Paid Status': 'Paid',
+      Remark: form.purpose.trim(),
       Date: form.date,
+      'Paid Date': form.date,
     });
     showToast('सहयोग दर्ज हो गया ✅');
     setForm({ donor: '', purpose: '', amount: '', date: todayStr() });

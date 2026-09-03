@@ -21,10 +21,10 @@ export default function Reports() {
 
   const columnMap = {
     members: ['ID', 'Name', 'Mobile', 'Village', 'JoinDate', 'Status'],
-    mashikJama: ['ID', 'दिनांक', 'माह', 'सदस्य का नाम', 'फोन नंबर', 'पद', 'राशि (₹)', 'भुगतान माध्यम', 'एंट्री दिनांक', 'एंट्री समय'],
-    sahyog: ['ID', 'DonorName', 'Purpose', 'Amount', 'Date'],
+    mashikJama: ['SN', 'दिनांक', 'माह', 'सदस्य का नाम', 'फोन नंबर', 'पद', 'राशि (₹)', 'भुगतान माध्यम', 'एंट्री दिनांक', 'एंट्री समय'],
+    sahyog: ['SN', 'Date', 'Name', 'Amount', 'Paid Status', 'Remark', 'Paid Date'],
     expense: ['ID', 'Date', 'Category', 'Description', 'Amount', 'PaidTo'],
-    udharChanda: ['ID', 'Date', 'Name', 'Amount', 'Paid Status', 'Paid Date', 'Remark'],
+    udharChanda: ['SN', 'Date', 'Name', 'Amount', 'Paid Status', 'Remark', 'Paid Date'],
   };
 
   return (
@@ -47,7 +47,7 @@ export default function Reports() {
         {tab === 'summary' ? (
           <div style={{ padding: '0 18px' }}>
             <div className="settings-box">
-              <h3>वित्तीय सारांश (Financial Summary)</h3>
+              <h3>वित्तीय सारांश (Financial सारांश)</h3>
               <table className="rep" style={{ marginTop: '8px' }}>
                 <tbody>
                   <tr>

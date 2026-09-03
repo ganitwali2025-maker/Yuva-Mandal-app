@@ -72,7 +72,7 @@ function getSheetData(ss, sheetName) {
         obj[header] = row[index] || '';
       });
       return obj;
-    }).filter(row => row.ID); // Filter out empty rows
+    }).filter(row => row.ID || row.SN); // Filter out empty rows
   } catch (err) {
     Logger.log(`Error reading ${sheetName}: ${err}`);
     return [];
@@ -98,8 +98,8 @@ function addRow(type, data) {
 
     // Build new row based on headers
     const newRow = headerRow.map(header => {
-      if (header === 'ID') {
-        // Auto-generate ID
+      if (header === 'ID' || header === 'SN') {
+        // Auto-generate ID or SN
         const lastRow = sheet.getLastRow();
         if (lastRow === 1) return 1;
         const lastID = sheet.getRange(lastRow, 1).getValue();
@@ -127,12 +127,12 @@ function initializeSheets() {
 
   // Create Mashik Jama sheet
   createSheetIfNotExists(ss, SHEET_NAMES.mashikJama, [
-    ['ID', 'दिनांक', 'माह', 'सदस्य का नाम', 'फोन नंबर', 'पद', 'राशि (₹)', 'भुगतान माध्यम', 'एंट्री दिनांक', 'एंट्री समय']
+    ['SN', 'दिनांक', 'माह', 'सदस्य का नाम', 'फोन नंबर', 'पद', 'राशि (₹)', 'भुगतान माध्यम', 'एंट्री दिनांक', 'एंट्री समय']
   ]);
 
   // Create Sahyog sheet
   createSheetIfNotExists(ss, SHEET_NAMES.sahyog, [
-    ['ID', 'DonorName', 'Purpose', 'Amount', 'Date']
+    ['SN', 'Date', 'Name', 'Amount', 'Paid Status', 'Remark', 'Paid Date']
   ]);
 
   // Create Expense sheet
@@ -142,7 +142,7 @@ function initializeSheets() {
 
   // Create Udhar Chanda sheet
   createSheetIfNotExists(ss, SHEET_NAMES.udharChanda, [
-    ['ID', 'Date', 'Name', 'Amount', 'Paid Status', 'Paid Date', 'Remark']
+    ['SN', 'Date', 'Name', 'Amount', 'Paid Status', 'Remark', 'Paid Date']
   ]);
 
   Logger.log('Sheets initialized successfully');

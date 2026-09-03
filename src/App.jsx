@@ -9,7 +9,7 @@ import AddMember from './pages/AddMember';
 import IdCard from './pages/IdCard';
 import MashikJama from './pages/MashikJama';
 import Sahyog from './pages/Sahyog';
-import Expense from './pages/Expense';
+import खर्च from './pages/खर्च';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import UdharChanda from './pages/UdharChanda';
@@ -26,7 +26,7 @@ export default function App() {
           <Route path="/idcard-self" element={<IdCard />} />
           <Route path="/mashik-jama" element={<MashikJama />} />
           <Route path="/sahyog" element={<Sahyog />} />
-          <Route path="/expense" element={<Expense />} />
+          <Route path="/expense" element={<खर्च />} />
           <Route path="/udhar-chanda" element={<UdharChanda />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/settings" element={<Settings />} />

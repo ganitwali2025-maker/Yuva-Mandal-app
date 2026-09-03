@@ -47,7 +47,7 @@ export default function MashikJama() {
 
   return (
     <div className="app">
-      <PageHeader title="मासिक जमा" subtitle="Monthly Deposit" backTo="/" />
+      <PageHeader title="मासिक जमा" subtitle="मासिक जमा" backTo="/" />
 
       <div className="content" style={{ paddingTop: '14px' }}>
         <div className="settings-box" style={{ margin: '0 0 16px' }}>

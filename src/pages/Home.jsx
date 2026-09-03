@@ -7,7 +7,7 @@ import ServiceIcon from '../components/cards/ServiceIcon';
 import BottomNav from '../components/layout/BottomNav';
 
 export default function Home() {
-  const { db, settings } = useApp();
+  const { db, settings, t } = useApp();
   const totals = calculateTotals(db);
   const recent = getRecentActivities(db, 5);
   const navigate = useNavigate();
@@ -38,24 +38,23 @@ export default function Home() {
 
       <div className="content">
         <div className="section-title">
-          <h2>त्वरित सेवाएं</h2>
+          <h2>{t('summary') || 'त्वरित सेवाएं'}</h2>
         </div>
         <div className="services-grid">
-          <ServiceIcon page="members" icon="☺" color="#F5811F" label="सदस्य सूची" />
-          <ServiceIcon page="add-member" icon="＋" color="#463CC9" label="नया सदस्य" />
-          <ServiceIcon page="mashik-jama" icon="₹" color="#16A870" label="मासिक जमा" />
-          <ServiceIcon page="sahyog" icon="🤝" color="#8B7CF6" label="सहयोग/दान" />
-          <ServiceIcon page="expense" icon="－" color="#E24C4B" label="खर्च दर्ज" />
-          <ServiceIcon page="udhar-chanda" icon="📒" color="#FF9800" label="उधार चंदा" />
-          <ServiceIcon page="reports" icon="▤" color="#0EA5A5" label="रिपोर्ट शीट" />
-          <ServiceIcon page="idcard-self" icon="🪪" color="#151966" label="मेरा कार्ड" />
-
+          <ServiceIcon page="members" icon="☺" color="#F5811F" label={t('members')} />
+          <ServiceIcon page="add-member" icon="＋" color="#463CC9" label={t('newMember')} />
+          <ServiceIcon page="mashik-jama" icon="₹" color="#16A870" label={t('mashikJama')} />
+          <ServiceIcon page="sahyog" icon="🤝" color="#8B7CF6" label={t('sahyog')} />
+          <ServiceIcon page="expense" icon="－" color="#E24C4B" label={t('expense')} />
+          <ServiceIcon page="udhar-chanda" icon="📒" color="#FF9800" label={t('udharChanda')} />
+          <ServiceIcon page="reports" icon="▤" color="#0EA5A5" label={t('reports')} />
+          <ServiceIcon page="idcard-self" icon="🪪" color="#151966" label={t('idCard')} />
         </div>
 
         <div className="section-title">
-          <h2>हाल की गतिविधि</h2>
+          <h2>{t('recentTransactions')}</h2>
           <a onClick={() => navigate('/reports')} style={{ cursor: 'pointer' }}>
-            सभी देखें
+            {t('seeAll')}
           </a>
         </div>
 

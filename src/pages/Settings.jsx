@@ -8,7 +8,7 @@ import Button from '../components/ui/Button';
 import StatusChip from '../components/ui/StatusChip';
 
 export default function Settings() {
-  const { settings, updateSettings, connState, showToast, performSync } = useApp();
+  const { settings, updateSettings, connState, showToast, performSync, language, switchLanguage, t } = useApp();
   const [form, setForm] = useState(settings);
 
   const handleSave = async () => {
@@ -20,27 +20,45 @@ export default function Settings() {
 
   const connStatus = connState === 'online' ? '● Google Sheet से जुड़ा है' :
                      connState === 'connecting' ? '● जोड़ा जा रहा है...' :
-                     connState === 'error' ? '● Connection Error' :
-                     '● Offline (Local only)';
+                     connState === 'error' ? '● कनेक्शन त्रुटि' :
+                     '● ऑफ़लाइन (केवल लोकल)';
 
   return (
     <div className="app">
-      <PageHeader title="सेटिंग" subtitle="Mandal & Google Sheet Setup" backTo="/" />
+      <PageHeader title={t('settings')} subtitle="Mandal & Google Sheet Setup" backTo="/" />
 
       <div className="content" style={{ paddingTop: '14px' }}>
         <div className="settings-box">
-          <h3>कनेक्शन स्टेटस</h3>
+          <h3>{t('language')}</h3>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+            <Button 
+              onClick={() => switchLanguage('hi')} 
+              style={{ flex: 1, padding: '8px', background: language === 'hi' ? '#311b92' : '#fff', color: language === 'hi' ? '#fff' : '#64748b', border: `1px solid ${language === 'hi' ? '#311b92' : '#cbd5e1'}` }}
+            >
+              {t('hindi')}
+            </Button>
+            <Button 
+              onClick={() => switchLanguage('en')} 
+              style={{ flex: 1, padding: '8px', background: language === 'en' ? '#311b92' : '#fff', color: language === 'en' ? '#fff' : '#64748b', border: `1px solid ${language === 'en' ? '#311b92' : '#cbd5e1'}` }}
+            >
+              {t('english')}
+            </Button>
+          </div>
+        </div>
+
+        <div className="settings-box">
+          <h3>{t('connectionStatus')}</h3>
           <StatusChip status={connState === 'online' ? 'ok' : 'off'} text={connStatus} />
         </div>
 
         <div className="settings-box">
-          <h3>मंडल का नाम</h3>
+          <h3>{t('mandalName')}</h3>
           <Input
             id="set_name"
             value={form.mandalName}
             onChange={(e) => setForm({ ...form, mandalName: e.target.value })}
           />
-          <h3>गाँव / शहर</h3>
+          <h3>{t('village')}</h3>
           <Input
             id="set_village"
             value={form.village}
@@ -49,7 +67,7 @@ export default function Settings() {
         </div>
 
         <div className="settings-box">
-          <h3>मासिक जमा (डिफ़ॉल्ट राशि)</h3>
+          <h3>{t('defaultMashikJama')}</h3>
           <Input
             id="set_mashikJama"
             type="number"
@@ -73,7 +91,7 @@ export default function Settings() {
         </div>
 
         <div className="form-sheet" style={{ paddingTop: 0 }}>
-          <Button onClick={handleSave}>सेव करें और जोड़ें</Button>
+          <Button onClick={handleSave}>{t('saveSettings')}</Button>
         </div>
       </div>
 

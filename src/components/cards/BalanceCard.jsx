@@ -5,7 +5,7 @@ export default function BalanceCard({ balance, income, expense, memberCount }) {
     <div className="balance-card">
       <div className="balance-top">
         <div>
-          <div className="balance-label">कुल बैलेंस (Total Balance)</div>
+          <div className="balance-label">कुल बैलेंस (कुल बैलेंस)</div>
           <div className="balance-amt">{fmt(balance)}</div>
         </div>
         <div className="balance-pill">{memberCount} सदस्य</div>

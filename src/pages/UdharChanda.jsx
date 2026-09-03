@@ -54,7 +54,7 @@ export default function UdharChanda() {
 
   return (
     <div className="app">
-      <PageHeader title="उधार चंदा" subtitle="Udhar Chanda" backTo="/" />
+      <PageHeader title="उधार चंदा" subtitle="उधार चंदा" backTo="/" />
 
       <div className="content" style={{ paddingTop: '14px' }}>
         <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
@@ -141,7 +141,7 @@ export default function UdharChanda() {
                   <div className="row-main">
                     <div className="t1">{r.Name}</div>
                     <div className="t2">
-                      {r.Date} · {r['Paid Status'] === 'Paid' ? <span style={{color:'var(--green)'}}>Paid</span> : <span style={{color:'var(--red)'}}>Unpaid</span>}
+                      {r.Date} · {r['Paid Status'] === 'Paid' ? <span style={{color:'var(--green)'}}>जमा हो गया</span> : <span style={{color:'var(--red)'}}>बकाया</span>}
                     </div>
                   </div>
                   <div className={`row-amt ${r['Paid Status'] === 'Paid' ? 'in' : 'out'}`}>
