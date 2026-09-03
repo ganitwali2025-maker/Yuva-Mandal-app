@@ -518,13 +518,28 @@
 const STORAGE_KEY = 'yuva_mandal_settings_v1';
 const CACHE_KEY = 'yuva_mandal_cache_v1';
 
-let settings = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+let settings = {};
+try {
+  settings = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+} catch(e) {
+  settings = {};
+}
 if (!settings.mandalName || settings.mandalName === 'Yuva Vikas Mandal') settings.mandalName = 'YUVA MITRA MANDAL';
 if (!settings.village || settings.village === 'आपका गाँव / शहर') settings.village = 'श्री बजरंग युवा गणेश उत्सव समिति';
 settings.scriptUrl = settings.scriptUrl || '';
 settings.monthlyMashikJamaAmt = settings.monthlyMashikJamaAmt || 100;
 
-let DB = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null') || { members: [], mashikJama: [], sahyog: [], expense: [] };
+let DB = {};
+try {
+  DB = JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
+} catch(e) {
+  DB = {};
+}
+DB.members = DB.members || [];
+DB.mashikJama = DB.mashikJama || DB.chanda || [];
+DB.sahyog = DB.sahyog || [];
+DB.expense = DB.expense || [];
+delete DB.chanda;
 
 let route = { page: 'home' };
 let connState = settings.scriptUrl ? 'connecting' : 'offline';
@@ -568,7 +583,12 @@ async function syncAll(){
     const res = await fetch(settings.scriptUrl + '?action=all&t=' + Date.now());
     const data = await res.json();
     if(data.ok){
-      DB = { members:data.members||[], mashikJama:data.mashikJama||[], sahyog:data.sahyog||[], expense:data.expense||[] };
+      DB = { 
+        members: data.members || [], 
+        mashikJama: data.mashikJama || data.chanda || [], 
+        sahyog: data.sahyog || [], 
+        expense: data.expense || [] 
+      };
       saveCache();
       connState = 'online';
     } else {
@@ -919,7 +939,7 @@ function addMemberForm(){
 /* ======================= ID CARD ======================= */
 function idCardPage(id){
   const m = DB.members.find(x=>String(x.ID)===String(id)) || {ID:'—', Name:'Devendra Nishad', Mobile:'79743 59208', Village:'ग्राम पंचायत नगरगांव धरसींवा रायपुर छत्तीसगढ़ - 493111', JoinDate:todayStr()};
-  const paid = DB.chanda.filter(c=>String(c.MemberID)===String(m.ID)).reduce((s,r)=>s+Number(r.Amount||0),0);
+  const paid = DB.mashikJama.filter(c=>String(c.MemberID)===String(m.ID) || String(c['सदस्य का नाम'])===String(m.Name)).reduce((s,r)=>s+Number(r.Amount||r['राशि (₹)']||0),0);
   return `
   <div class="page-head">
     <button class="back-btn" data-nav="members"><span class="material-symbols-outlined" style="font-size:20px;">arrow_back</span></button>
@@ -1073,7 +1093,7 @@ function chandaPage(){
         <label style="display:block; font-size:14px; font-weight:700; color:#1e293b; margin-bottom:8px;">3. राशि (₹) <span style="color:red;">*</span></label>
         <div style="position:relative;">
           <span style="position:absolute; left:16px; top:50%; transform:translateY(-50%); color:#1e293b; font-weight:bold; font-size:16px;">₹</span>
-          <input id="c_amount" type="number" placeholder="राशि दर्ज करें" value="${settings.monthlyChandaAmt}" style="width:100%; padding:12px 12px 12px 40px; border:1px solid #cbd5e1; border-radius:8px; font-family:inherit; font-size:14px; background:#fff; outline:none; color:#1e293b; font-weight:600;">
+          <input id="c_amount" type="number" placeholder="राशि दर्ज करें" value="${settings.monthlyMashikJamaAmt}" style="width:100%; padding:12px 12px 12px 40px; border:1px solid #cbd5e1; border-radius:8px; font-family:inherit; font-size:14px; background:#fff; outline:none; color:#1e293b; font-weight:600;">
         </div>
       </div>
 
@@ -1139,7 +1159,7 @@ function sahyogPage(){
         </div>`).join('')}</div>`
     }
   </div>
-  ${navBar('chanda')}
+  ${navBar('mashikJama')}
   `;
 }
 
