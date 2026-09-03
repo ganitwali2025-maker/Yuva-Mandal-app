@@ -7,7 +7,7 @@ import Home from './pages/Home';
 import Members from './pages/Members';
 import AddMember from './pages/AddMember';
 import IdCard from './pages/IdCard';
-import Chanda from './pages/Chanda';
+import MashikJama from './pages/MashikJama';
 import Sahyog from './pages/Sahyog';
 import Expense from './pages/Expense';
 import Reports from './pages/Reports';
@@ -23,7 +23,7 @@ export default function App() {
           <Route path="/add-member" element={<AddMember />} />
           <Route path="/idcard/:id" element={<IdCard />} />
           <Route path="/idcard-self" element={<IdCard />} />
-          <Route path="/chanda" element={<Chanda />} />
+          <Route path="/mashik-jama" element={<MashikJama />} />
           <Route path="/sahyog" element={<Sahyog />} />
           <Route path="/expense" element={<Expense />} />
           <Route path="/reports" element={<Reports />} />

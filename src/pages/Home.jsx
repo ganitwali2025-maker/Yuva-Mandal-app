@@ -43,7 +43,7 @@ export default function Home() {
         <div className="services-grid">
           <ServiceIcon page="members" icon="☺" color="#F5811F" label="सदस्य सूची" />
           <ServiceIcon page="add-member" icon="＋" color="#463CC9" label="नया सदस्य" />
-          <ServiceIcon page="chanda" icon="₹" color="#16A870" label="मासिक चंदा" />
+          <ServiceIcon page="mashik-jama" icon="₹" color="#16A870" label="मासिक जमा" />
           <ServiceIcon page="sahyog" icon="🤝" color="#8B7CF6" label="सहयोग/दान" />
           <ServiceIcon page="expense" icon="－" color="#E24C4B" label="खर्च दर्ज" />
           <ServiceIcon page="reports" icon="▤" color="#0EA5A5" label="रिपोर्ट शीट" />
@@ -63,7 +63,7 @@ export default function Home() {
             <div className="e-ic">🗂️</div>
             अभी कोई एंट्री नहीं है
             <br />
-            नीचे से चंदा या खर्च जोड़ें
+            नीचे से जमा या खर्च जोड़ें
           </div>
         ) : (
           <div className="card-list">

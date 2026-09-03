@@ -6,7 +6,7 @@ export default function BottomNav({ active }) {
   const items = [
     { k: 'home', ic: '⌂', label: 'होम' },
     { k: 'members', ic: '☺', label: 'सदस्य' },
-    { k: 'chanda', ic: '₹', label: 'चंदा' },
+    { k: 'mashik-jama', ic: '₹', label: 'जमा' },
     { k: 'reports', ic: '▤', label: 'रिपोर्ट' },
     { k: 'settings', ic: '⚙', label: 'सेटिंग' },
   ];

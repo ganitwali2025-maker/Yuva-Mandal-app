@@ -9,18 +9,18 @@ export default function Reports() {
   const [tab, setTab] = useState('summary');
   const totals = calculateTotals(db);
 
-  const tabs = ['summary', 'members', 'chanda', 'sahyog', 'expense'];
+  const tabs = ['summary', 'members', 'mashikJama', 'sahyog', 'expense'];
   const tabLabels = {
     summary: 'सारांश',
     members: 'सदस्य',
-    chanda: 'चंदा',
+    mashikJama: 'मासिक जमा',
     sahyog: 'सहयोग',
     expense: 'खर्च',
   };
 
   const columnMap = {
     members: ['ID', 'Name', 'Mobile', 'Village', 'JoinDate', 'Status'],
-    chanda: ['ID', 'MemberName', 'Month', 'Year', 'Amount', 'Date', 'Mode'],
+    mashikJama: ['ID', 'दिनांक', 'माह', 'सदस्य का नाम', 'फोन नंबर', 'पद', 'राशि (₹)', 'भुगतान माध्यम', 'एंट्री दिनांक', 'एंट्री समय'],
     sahyog: ['ID', 'DonorName', 'Purpose', 'Amount', 'Date'],
     expense: ['ID', 'Date', 'Category', 'Description', 'Amount', 'PaidTo'],
   };
@@ -49,14 +49,14 @@ export default function Reports() {
               <table className="rep" style={{ marginTop: '8px' }}>
                 <tbody>
                   <tr>
-                    <td>कुल आय (चंदा + सहयोग)</td>
+                    <td>कुल आय (जमा + सहयोग)</td>
                     <td style={{ textAlign: 'right', color: 'var(--green)', fontWeight: 700 }}>
                       {fmt(totals.income)}
                     </td>
                   </tr>
                   <tr>
-                    <td>— मासिक चंदा</td>
-                    <td style={{ textAlign: 'right' }}>{fmt(totals.chandaTotal)}</td>
+                    <td>— मासिक जमा</td>
+                    <td style={{ textAlign: 'right' }}>{fmt(totals.mashikJamaTotal)}</td>
                   </tr>
                   <tr>
                     <td>— सहयोग / दान</td>
@@ -112,7 +112,7 @@ export default function Reports() {
                   db[tab].map((r, idx) => (
                     <tr key={idx}>
                       {columnMap[tab].map((c) => (
-                        <td key={c}>{c === 'Amount' ? fmt(r[c]) : r[c] || '-'}</td>
+                        <td key={c}>{c === 'Amount' || c === 'राशि (₹)' ? fmt(r[c]) : r[c] || '-'}</td>
                       ))}
                     </tr>
                   ))

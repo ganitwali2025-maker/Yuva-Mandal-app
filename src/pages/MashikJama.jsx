@@ -8,7 +8,7 @@ import Select from '../components/ui/Select';
 import Button from '../components/ui/Button';
 import { fmt } from '../utils/helpers';
 
-export default function Chanda() {
+export default function MashikJama() {
   const { db, settings, addRow, showToast } = useApp();
   const totals = calculateTotals(db);
   const [loading, setLoading] = useState(false);
@@ -16,7 +16,7 @@ export default function Chanda() {
     member: '',
     month: new Date().getMonth(),
     year: new Date().getFullYear(),
-    amount: settings.monthlyChandaAmt,
+    amount: settings.monthlyMashikJamaAmt,
     date: todayStr(),
     mode: 'Cash',
   });
@@ -30,26 +30,28 @@ export default function Chanda() {
 
     const member = db.members.find((m) => String(m.ID) === String(form.member));
     setLoading(true);
-    await addRow('chanda', {
-      MemberID: form.member,
-      MemberName: member ? member.Name : '',
-      Month: ['जनवरी','फ़रवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'][form.month],
-      Year: form.year,
-      Amount: form.amount,
-      Date: form.date,
-      Mode: form.mode,
+    await addRow('mashikJama', {
+      'सदस्य का नाम': member ? member.Name : '',
+      'फोन नंबर': member ? member.Mobile : '',
+      'पद': member ? member.Pad : '',
+      'माह': ['जनवरी','फ़रवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'][form.month],
+      'राशि (₹)': form.amount,
+      'दिनांक': form.date,
+      'भुगतान माध्यम': form.mode,
+      'एंट्री दिनांक': new Date().toLocaleDateString('en-GB'),
+      'एंट्री समय': new Date().toLocaleTimeString('en-US', { hour12: true })
     });
-    showToast('चंदा दर्ज हो गया ✅');
+    showToast('जमा दर्ज हो गया ✅');
     setLoading(false);
   };
 
   return (
     <div className="app">
-      <PageHeader title="मासिक चंदा" subtitle="Monthly Contribution" backTo="/" />
+      <PageHeader title="मासिक जमा" subtitle="Monthly Deposit" backTo="/" />
 
       <div className="content" style={{ paddingTop: '14px' }}>
         <div className="settings-box" style={{ margin: '0 0 16px' }}>
-          <h3>कुल चंदा संग्रह</h3>
+          <h3>कुल मासिक जमा</h3>
           <p
             style={{
               marginBottom: 0,
@@ -59,7 +61,7 @@ export default function Chanda() {
               fontSize: '22px',
             }}
           >
-            {fmt(totals.chandaTotal)}
+            {fmt(totals.mashikJamaTotal)}
           </p>
         </div>
 
@@ -126,49 +128,63 @@ export default function Chanda() {
             onChange={(e) => setForm({ ...form, date: e.target.value })}
           />
 
-          <Select
-            label="माध्यम"
-            id="c_mode"
-            value={form.mode}
-            onChange={(e) => setForm({ ...form, mode: e.target.value })}
-            options={[
-              { label: 'Cash', value: 'Cash' },
-              { label: 'UPI', value: 'UPI' },
-              { label: 'Bank Transfer', value: 'Bank Transfer' },
-            ]}
-          />
+          <div className="field">
+            <label>भुगतान माध्यम</label>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              {['Cash', 'UPI', 'Bank Transfer'].map(m => (
+                <div
+                  key={m}
+                  onClick={() => setForm({ ...form, mode: m })}
+                  style={{
+                    flex: 1,
+                    textAlign: 'center',
+                    padding: '10px 5px',
+                    borderRadius: '8px',
+                    border: form.mode === m ? '2px solid var(--primary)' : '1px solid #ccc',
+                    background: form.mode === m ? 'var(--primary-light)' : '#fff',
+                    color: form.mode === m ? 'var(--primary)' : '#555',
+                    fontWeight: form.mode === m ? '600' : '400',
+                    cursor: 'pointer',
+                    fontSize: '14px'
+                  }}
+                >
+                  {m}
+                </div>
+              ))}
+            </div>
+          </div>
 
-          <Button disabled={loading}>{loading ? 'सेव हो रहा है...' : 'चंदा दर्ज करें'}</Button>
+          <Button disabled={loading}>{loading ? 'सेव हो रहा है...' : 'जमा दर्ज करें'}</Button>
         </form>
 
         <div className="section-title">
           <h2>हाल की एंट्री</h2>
         </div>
 
-        {db.chanda.length === 0 ? (
+        {db.mashikJama.length === 0 ? (
           <div className="empty">कोई एंट्री नहीं</div>
         ) : (
           <div className="card-list">
-            {[...db.chanda]
+            {[...db.mashikJama]
               .reverse()
               .slice(0, 15)
               .map((r, idx) => (
                 <div key={idx} className="row-card">
-                  <div className="avatar">{r.MemberName?.charAt(0) || '?'}</div>
+                  <div className="avatar">{r['सदस्य का नाम']?.charAt(0) || '?'}</div>
                   <div className="row-main">
-                    <div className="t1">{r.MemberName}</div>
+                    <div className="t1">{r['सदस्य का नाम']}</div>
                     <div className="t2">
-                      {r.Month} {r.Year} · {r.Mode || ''}
+                      {r['माह']} · {r['भुगतान माध्यम'] || ''}
                     </div>
                   </div>
-                  <div className="row-amt in">+{fmt(r.Amount)}</div>
+                  <div className="row-amt in">+{fmt(r['राशि (₹)'])}</div>
                 </div>
               ))}
           </div>
         )}
       </div>
 
-      <BottomNav active="chanda" />
+      <BottomNav active="mashik-jama" />
     </div>
   );
 }

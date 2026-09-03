@@ -3,7 +3,7 @@
 
 const SHEET_NAMES = {
   members: 'Members',
-  chanda: 'Chanda',
+  mashikJama: 'Mashik Jama',
   sahyog: 'Sahyog',
   expense: 'Expense'
 };
@@ -46,7 +46,7 @@ function getAllData() {
   const result = {
     ok: true,
     members: getSheetData(ss, SHEET_NAMES.members),
-    chanda: getSheetData(ss, SHEET_NAMES.chanda),
+    mashikJama: getSheetData(ss, SHEET_NAMES.mashikJama),
     sahyog: getSheetData(ss, SHEET_NAMES.sahyog),
     expense: getSheetData(ss, SHEET_NAMES.expense)
   };
@@ -123,9 +123,9 @@ function initializeSheets() {
     ['ID', 'Name', 'Pad', 'Age', 'Mobile', 'Address', 'Photo', 'Status']
   ]);
 
-  // Create Chanda sheet
-  createSheetIfNotExists(ss, SHEET_NAMES.chanda, [
-    ['ID', 'MemberID', 'MemberName', 'Month', 'Year', 'Amount', 'Date', 'Mode']
+  // Create Mashik Jama sheet
+  createSheetIfNotExists(ss, SHEET_NAMES.mashikJama, [
+    ['ID', 'दिनांक', 'माह', 'सदस्य का नाम', 'फोन नंबर', 'पद', 'राशि (₹)', 'भुगतान माध्यम', 'एंट्री दिनांक', 'एंट्री समय']
   ]);
 
   // Create Sahyog sheet

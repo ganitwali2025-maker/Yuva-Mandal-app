@@ -13,7 +13,7 @@ export async function syncAll(scriptUrl) {
     if (data.ok) {
       const db = {
         members: data.members || [],
-        chanda: data.chanda || [],
+        mashikJama: data.mashikJama || [],
         sahyog: data.sahyog || [],
         expense: data.expense || [],
       };
@@ -31,7 +31,7 @@ export async function pushRow(scriptUrl, type, data) {
   if (!scriptUrl) {
     // Offline fallback
     const db = getLocalDB();
-    const key = { member: 'members', chanda: 'chanda', sahyog: 'sahyog', expense: 'expense' }[type];
+    const key = { member: 'members', mashikJama: 'mashikJama', sahyog: 'sahyog', expense: 'expense' }[type];
     const id = (db[key].reduce((m, r) => Math.max(m, Number(r.ID) || 0), 0)) + 1;
     db[key].push({ ID: id, ...data });
     saveCache(db);
@@ -65,7 +65,7 @@ export function saveSettings(settings) {
 export function getLocalDB() {
   return JSON.parse(localStorage.getItem(CACHE_KEY) || 'null') || {
     members: [],
-    chanda: [],
+    mashikJama: [],
     sahyog: [],
     expense: [],
   };
@@ -80,7 +80,7 @@ export function initializeDefaults() {
   settings.mandalName = settings.mandalName || 'Yuva Vikas Mandal';
   settings.village = settings.village || 'आपका गाँव / शहर';
   settings.scriptUrl = settings.scriptUrl || '';
-  settings.monthlyChandaAmt = settings.monthlyChandaAmt || 100;
+  settings.monthlyMashikJamaAmt = settings.monthlyMashikJamaAmt || 100;
   saveSettings(settings);
   return settings;
 }

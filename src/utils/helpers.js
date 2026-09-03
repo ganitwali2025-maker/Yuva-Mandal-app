@@ -28,18 +28,18 @@ export function fdate(d) {
 
 export function calculateTotals(db) {
   const income =
-    db.chanda.reduce((s, r) => s + Number(r.Amount || 0), 0) +
+    db.mashikJama.reduce((s, r) => s + Number(r.Amount || r['राशि (₹)'] || 0), 0) +
     db.sahyog.reduce((s, r) => s + Number(r.Amount || 0), 0);
   const expense = db.expense.reduce((s, r) => s + Number(r.Amount || 0), 0);
   const balance = income - expense;
-  const chandaTotal = db.chanda.reduce((s, r) => s + Number(r.Amount || 0), 0);
+  const mashikJamaTotal = db.mashikJama.reduce((s, r) => s + Number(r.Amount || r['राशि (₹)'] || 0), 0);
   const sahyogTotal = db.sahyog.reduce((s, r) => s + Number(r.Amount || 0), 0);
-  return { income, expense, balance, chandaTotal, sahyogTotal };
+  return { income, expense, balance, mashikJamaTotal, sahyogTotal };
 }
 
 export function getRecentActivities(db, limit = 5) {
   const recent = [
-    ...db.chanda.map((r) => ({ ...r, _type: 'chanda', _date: r.Date })),
+    ...db.mashikJama.map((r) => ({ ...r, _type: 'mashikJama', _date: r.Date || r['दिनांक'] })),
     ...db.sahyog.map((r) => ({ ...r, _type: 'sahyog', _date: r.Date })),
     ...db.expense.map((r) => ({ ...r, _type: 'expense', _date: r.Date })),
   ].sort((a, b) => new Date(b._date) - new Date(a._date)).slice(0, limit);

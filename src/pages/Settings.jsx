@@ -49,12 +49,12 @@ export default function Settings() {
         </div>
 
         <div className="settings-box">
-          <h3>मासिक चंदा (डिफ़ॉल्ट राशि)</h3>
+          <h3>मासिक जमा (डिफ़ॉल्ट राशि)</h3>
           <Input
-            id="set_chanda"
+            id="set_mashikJama"
             type="number"
-            value={form.monthlyChandaAmt}
-            onChange={(e) => setForm({ ...form, monthlyChandaAmt: Number(e.target.value) })}
+            value={form.monthlyMashikJamaAmt}
+            onChange={(e) => setForm({ ...form, monthlyMashikJamaAmt: Number(e.target.value) })}
           />
         </div>
 
