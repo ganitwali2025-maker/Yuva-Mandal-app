@@ -34,7 +34,9 @@ export function calculateTotals(db) {
   const balance = income - expense;
   const mashikJamaTotal = db.mashikJama.reduce((s, r) => s + Number(r.Amount || r['राशि (₹)'] || 0), 0);
   const sahyogTotal = db.sahyog.reduce((s, r) => s + Number(r.Amount || 0), 0);
-  return { income, expense, balance, mashikJamaTotal, sahyogTotal };
+  const udharTotal = (db.udharChanda || []).reduce((s, r) => s + Number(r.Amount || 0), 0);
+  const udharPaid = (db.udharChanda || []).filter(r => r['Paid Status'] === 'Paid').reduce((s, r) => s + Number(r.Amount || 0), 0);
+  return { income, expense, balance, mashikJamaTotal, sahyogTotal, udharTotal, udharPaid };
 }
 
 export function getRecentActivities(db, limit = 5) {

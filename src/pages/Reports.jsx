@@ -9,13 +9,14 @@ export default function Reports() {
   const [tab, setTab] = useState('summary');
   const totals = calculateTotals(db);
 
-  const tabs = ['summary', 'members', 'mashikJama', 'sahyog', 'expense'];
+  const tabs = ['summary', 'members', 'mashikJama', 'sahyog', 'expense', 'udharChanda'];
   const tabLabels = {
     summary: 'सारांश',
     members: 'सदस्य',
     mashikJama: 'मासिक जमा',
     sahyog: 'सहयोग',
     expense: 'खर्च',
+    udharChanda: 'उधार चंदा',
   };
 
   const columnMap = {
@@ -23,6 +24,7 @@ export default function Reports() {
     mashikJama: ['ID', 'दिनांक', 'माह', 'सदस्य का नाम', 'फोन नंबर', 'पद', 'राशि (₹)', 'भुगतान माध्यम', 'एंट्री दिनांक', 'एंट्री समय'],
     sahyog: ['ID', 'DonorName', 'Purpose', 'Amount', 'Date'],
     expense: ['ID', 'Date', 'Category', 'Description', 'Amount', 'PaidTo'],
+    udharChanda: ['ID', 'Date', 'Name', 'Amount', 'Paid Status', 'Paid Date', 'Remark'],
   };
 
   return (
@@ -63,6 +65,14 @@ export default function Reports() {
                     <td style={{ textAlign: 'right' }}>{fmt(totals.sahyogTotal)}</td>
                   </tr>
                   <tr>
+                    <td>— उधार चंदा (कुल)</td>
+                    <td style={{ textAlign: 'right' }}>{fmt(totals.udharTotal)}</td>
+                  </tr>
+                  <tr>
+                    <td>— उधार चंदा (प्राप्त)</td>
+                    <td style={{ textAlign: 'right', color: 'var(--green)' }}>{fmt(totals.udharPaid)}</td>
+                  </tr>
+                  <tr>
                     <td>कुल खर्च</td>
                     <td style={{ textAlign: 'right', color: 'var(--red)', fontWeight: 700 }}>
                       {fmt(totals.expense)}
@@ -95,7 +105,7 @@ export default function Reports() {
                 </tr>
               </thead>
               <tbody>
-                {db[tab].length === 0 ? (
+                {!db[tab] || db[tab].length === 0 ? (
                   <tr>
                     <td
                       colSpan={columnMap[tab].length}
